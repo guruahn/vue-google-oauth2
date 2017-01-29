@@ -40,8 +40,8 @@
       },
 
       signIn: function (successCallback, errorCallback) {
-        window.gapi.auth2.getAuthInstance().signIn().then(function () {
-          successCallback()
+        window.gapi.auth2.getAuthInstance().signIn().then(function (googleUser) {
+          successCallback(googleUser)
         }, function (error) {
           errorCallback(error)
         })
@@ -76,7 +76,8 @@
     return new Promise(function (resolve, reject) {
       window.gapi.load('auth2', function () {
         window.gapi.auth2.init({
-          client_id: googleAuthConfig.clientID
+          client_id: googleAuthConfig.clientID,
+          scope: 'profile email https://www.googleapis.com/auth/plus.login'
         })
         resolve()
       })
