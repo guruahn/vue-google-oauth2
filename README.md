@@ -18,8 +18,9 @@ Handling Google sign-in, this is added within the login page
 ```
 import Vue from 'vue'
 
-Vue.googleAuth().signIn(function () { 
+Vue.googleAuth().signIn(function (googleUser) { 
   // things to do when sign-in succeeds
+  // To get the access token: googleUser.access_token
 }, function () {
   // things to do when sign-in fails
 ))
