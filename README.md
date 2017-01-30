@@ -2,7 +2,7 @@
 Handling Google sign-in and sign-out for Vue.js applications
 
 ## Installation
-`npm install simmatrix/vue-google-auth`
+`npm install vue-google-auth`
 
 ## Initialization
 ```
