@@ -40,27 +40,23 @@ module.exports = {
       this.toggleLoading()
       this.resetResponse()
 
-      this.$http.post(GoogleAuth.googleAuth.callbackURL, { code: authorizationCode, redirect_uri: 'postmessage' }).then(function (response) {
+      this.$http.post('http://your-backend-server.com/auth/google', { code: authorizationCode, redirect_uri: 'postmessage' }).then(function (response) {
         if (response.body) {
           var data = response.body
 
-          if (data.success === 0) {
-            this.response = data.error
-          } else {
-            // Save to vuex
-            this.$store.commit('SET_USER', data.admin_data)
-            var token = 'Bearer ' + data.token
-            this.$store.commit('SET_TOKEN', token)
+          // Save to vuex
+          this.$store.commit('SET_USER', data.user_data)
+          var token = 'Bearer ' + data.token
+          this.$store.commit('SET_TOKEN', token)
 
-            // Save to local storage as well
-            if (window.localStorage) {
-              window.localStorage.setItem('user', JSON.stringify(data.admin_data))
-              window.localStorage.setItem('token', token)
-            }
-
-            // redirect to the dashboard
-            this.$router.replace('home')
+          // Save to local storage as well
+          if (window.localStorage) {
+            window.localStorage.setItem('user', JSON.stringify(data.user_data))
+            window.localStorage.setItem('token', token)
           }
+
+          // redirect to the dashboard
+          this.$router.replace('home')
         }
       }, function (response) {
         var data = response.body
