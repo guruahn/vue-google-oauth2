@@ -52,14 +52,14 @@ import Vue from 'vue'
 // Just add this line to turn on the offline access mode
 Vue.googleAuth().hasOfflineAccess()
 
-Vue.googleAuth().signIn(function (authorization_code) { 
+Vue.googleAuth().signIn(function (authorizationCode) { 
   // things to do when sign-in succeeds
 }, function (error) {
   // things to do when sign-in fails
 ))
 ```
 
-The `authorization_code` that is being returned is the `one-time code` that you can send to your backend server, so that the server can exchange for its own access token and refresh token.
+The `authorizationCode` that is being returned is the `one-time code` that you can send to your backend server, so that the server can exchange for its own access token and refresh token.
 
 ## Usage - Sign-out
 Handling Google sign-out
