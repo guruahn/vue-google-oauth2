@@ -45,18 +45,19 @@ module.exports = {
           var data = response.body
 
           // Save to vuex
-          this.$store.commit('SET_USER', data.user_data)
           var token = 'Bearer ' + data.token
+          this.$store.commit('SET_USER', data.user_data)
           this.$store.commit('SET_TOKEN', token)
 
-          // Save to local storage as well
+          // Save to local storage as well 
+          // ( or you can install the vuex-persistedstate plugin so that you won't have to do this step, only store to Vuex is sufficient )
           if (window.localStorage) {
             window.localStorage.setItem('user', JSON.stringify(data.user_data))
             window.localStorage.setItem('token', token)
           }
 
           // redirect to the dashboard
-          this.$router.replace('home')
+          this.$router.push({ name: 'home' })
         }
       }, function (response) {
         var data = response.body
