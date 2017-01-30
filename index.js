@@ -7,7 +7,8 @@
     global.Index = factory()
   }
 }(this, function () {
-  var googleAuthConfig = null
+  var config = null
+  var hasOfflineAccess = false
   var gapiUrl = 'https://apis.google.com/js/api:client.js'
 
   var gAuth = {
@@ -16,7 +17,7 @@
       Vue.prototype.$googleAuth = googleAuth
 
       if (typeof options === 'object') {
-        googleAuthConfig = options
+        config = Object.assign(options, { scope: 'profile email https://www.googleapis.com/auth/plus.login' })
       }
     }
   }
@@ -39,12 +40,24 @@
         })
       },
 
+      hasOfflineAccess: function () {
+        hasOfflineAccess = true
+      },
+
       signIn: function (successCallback, errorCallback) {
-        window.gapi.auth2.getAuthInstance().signIn().then(function (googleUser) {
-          successCallback(googleUser)
-        }, function (error) {
-          errorCallback(error)
-        })
+        if (hasOfflineAccess) {
+          window.gapi.auth2.getAuthInstance().grantOfflineAccess({'redirect_uri': 'postmessage'}).then(function (response) {
+            successCallback(response.code)
+          }, function (error) {
+            errorCallback(error)
+          })
+        } else {
+          window.gapi.auth2.getAuthInstance().signIn().then(function (googleUser) {
+            successCallback(googleUser)
+          }, function (error) {
+            errorCallback(error)
+          })
+        }
       },
 
       signOut: function (successCallback, errorCallback) {
@@ -75,10 +88,7 @@
   function initClient () {
     return new Promise(function (resolve, reject) {
       window.gapi.load('auth2', function () {
-        window.gapi.auth2.init({
-          client_id: googleAuthConfig.clientID,
-          scope: 'profile email https://www.googleapis.com/auth/plus.login'
-        })
+        window.gapi.auth2.init(config)
         resolve()
       })
     })
