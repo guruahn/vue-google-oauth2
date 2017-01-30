@@ -8,7 +8,7 @@
   }
 }(this, function () {
   var config = null
-  var hasOfflineAccess = false
+  var directAccess = false
   var gapiUrl = 'https://apis.google.com/js/api:client.js'
 
   var gAuth = {
@@ -40,20 +40,20 @@
         })
       },
 
-      hasOfflineAccess: function () {
-        hasOfflineAccess = true
+      directAccess: function () {
+        directAccess = true
       },
 
       signIn: function (successCallback, errorCallback) {
-        if (hasOfflineAccess) {
-          window.gapi.auth2.getAuthInstance().grantOfflineAccess({'redirect_uri': 'postmessage'}).then(function (response) {
-            successCallback(response.code)
+        if (directAccess) {
+          window.gapi.auth2.getAuthInstance().signIn().then(function (googleUser) {
+            successCallback(googleUser)
           }, function (error) {
             errorCallback(error)
           })
         } else {
-          window.gapi.auth2.getAuthInstance().signIn().then(function (googleUser) {
-            successCallback(googleUser)
+          window.gapi.auth2.getAuthInstance().grantOfflineAccess({'redirect_uri': 'postmessage'}).then(function (response) {
+            successCallback(response.code)
           }, function (error) {
             errorCallback(error)
           })

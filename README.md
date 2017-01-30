@@ -14,9 +14,26 @@ Vue.googleAuth().load()
 Ideally you shall put in this in your main file, e.g. main.js
 
 ## Usage - Sign-in
-(a) Handling general Google sign-in, this is added within the login page
+###(a) Handling Google sign-in, getting the one-time authorization code from Google
 ```
 import Vue from 'vue'
+
+Vue.googleAuth().signIn(function (authorizationCode) { 
+  // things to do when sign-in succeeds, you may send the authorizationCode to your backend server
+}, function (error) {
+  // things to do when sign-in fails
+))
+```
+
+The `authorizationCode` that is being returned is the `one-time code` that you can send to your backend server, so that the server can exchange for its own access token and refresh token.
+
+
+###(b) Alternatively, if you would like to directly get back the access_token and id_token
+```
+import Vue from 'vue'
+
+// Just add in this line
+Vue.googleAuth().directAccess()
 
 Vue.googleAuth().signIn(function (googleUser) { 
   // things to do when sign-in succeeds
@@ -25,7 +42,7 @@ Vue.googleAuth().signIn(function (googleUser) {
 ))
 ```
 
-The `googleUser` that is being returned will be:
+The `googleUser` object that is being returned will be:
 ```
 {
   "token_type": "Bearer",
@@ -45,22 +62,6 @@ The `googleUser` that is being returned will be:
 }
 ```
 
-(b) Alternatively, if you would like to access to user's information offline
-```
-import Vue from 'vue'
-
-// Just add this line to turn on the offline access mode
-Vue.googleAuth().hasOfflineAccess()
-
-Vue.googleAuth().signIn(function (authorizationCode) { 
-  // things to do when sign-in succeeds
-}, function (error) {
-  // things to do when sign-in fails
-))
-```
-
-The `authorizationCode` that is being returned is the `one-time code` that you can send to your backend server, so that the server can exchange for its own access token and refresh token.
-
 ## Usage - Sign-out
 Handling Google sign-out
 ```
@@ -72,3 +73,7 @@ Vue.googleAuth().signOut(function () {
   // things to do when sign-out fails
 ))
 ```
+
+## Additional Help
+If you are curious of how the entire Google sign-in flow works
+![Google Sign-in Flow](http://i.imgur.com/BQPXKyT.png)
