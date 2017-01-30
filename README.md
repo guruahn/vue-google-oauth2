@@ -13,7 +13,7 @@ import GoogleAuth from 'vue-google-auth'
 Vue.use(GoogleAuth, { clientID: 'xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com' })
 Vue.googleAuth().load()
 ```
-Ideally you shall put in this in your app entry file, e.g. src/main.js
+Ideally you shall place this in your app entry file, e.g. src/main.js
 
 ## Usage - Sign-in
 ###(a) Handling Google sign-in, getting the one-time authorization code from Google
