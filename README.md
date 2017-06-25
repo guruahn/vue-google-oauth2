@@ -12,7 +12,7 @@ npm install vue-google-oauth
 
 ## Initialization
 ```
-import GoogleAuth from 'vue-google-auth'
+import GoogleAuth from 'vue-google-oauth'
 
 Vue.use(GoogleAuth, { client_id: 'xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com' })
 Vue.googleAuth().load()
