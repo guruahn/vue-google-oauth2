@@ -20,7 +20,7 @@ Vue.googleAuth().load()
 Ideally you shall place this in your app entry file, e.g. src/main.js
 
 ## Usage - Sign-in
-###(a) Handling Google sign-in, getting the one-time authorization code from Google
+### (a) Handling Google sign-in, getting the one-time authorization code from Google
 ```
 import Vue from 'vue'
 
@@ -45,7 +45,7 @@ Vue.googleAuth().signIn(function (authorizationCode) {
 The `authorizationCode` that is being returned is the `one-time code` that you can send to your backend server, so that the server can exchange for its own access token and refresh token.
 
 
-###(b) Alternatively, if you would like to directly get back the access_token and id_token
+### (b) Alternatively, if you would like to directly get back the access_token and id_token
 ```
 import Vue from 'vue'
 
