@@ -39,7 +39,7 @@ Vue.googleAuth().signIn(function (authorizationCode) {
 
 }, function (error) {
   // things to do when sign-in fails
-))
+})
 ```
 
 The `authorizationCode` that is being returned is the `one-time code` that you can send to your backend server, so that the server can exchange for its own access token and refresh token.
@@ -56,7 +56,7 @@ Vue.googleAuth().signIn(function (googleUser) {
   // things to do when sign-in succeeds
 }, function (error) {
   // things to do when sign-in fails
-))
+})
 ```
 
 The `googleUser` object that is being returned will be:
@@ -88,7 +88,7 @@ Vue.googleAuth().signOut(function () {
   // things to do when sign-out succeeds
 }, function (error) {
   // things to do when sign-out fails
-))
+})
 ```
 
 ## Additional Help
