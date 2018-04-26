@@ -1,18 +1,18 @@
-# vue-google-oauth
+# vue-google-oauth2
 Handling Google sign-in and sign-out for Vue.js applications
 
-Forked from https://github.com/simmatrix/vue-google-auth
+Forked from https://github.com/TinyNova/vue-google-oauth
 
 Same as fork but allows you to override options and a few other bug fixes.
 
 ## Installation
 ```
-npm install vue-google-oauth
+npm install vue-google-oauth2
 ```
 
 ## Initialization
 ```
-import GoogleAuth from 'vue-google-oauth'
+import GoogleAuth from 'vue-google-oauth2'
 
 Vue.use(GoogleAuth, { client_id: 'xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com' })
 Vue.googleAuth().load()

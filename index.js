@@ -7,37 +7,38 @@
     global.Index = factory()
   }
 }(this, function () {
-  var config = null
+  let config = null
+  let defaultConfig = { scope: 'profile email https://www.googleapis.com/auth/plus.login', discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'], }
   var directAccess = false
-  var gapiUrl = 'https://apis.google.com/js/api:client.js'
+  var gapiUrl = 'https://apis.google.com/js/api.js'
 
   var gAuth = {
     install: function (Vue, options) {
-      Vue.googleAuth = googleAuth
-      Vue.prototype.$googleAuth = googleAuth
-
+			//set config
       if (typeof options === 'object') {
-        config = Object.assign({ scope: 'profile email https://www.googleapis.com/auth/plus.login' }, options)
-      }
+        config = Object.assign(defaultConfig, options)
+			}else{
+				console.warn('')
+			}
+			
+			//Install Vue plugin
+			Vue.gAuth = googleAuth
+			Object.defineProperties(Vue.prototype, {
+				$gAuth: {
+					get: function () {
+						return Vue.gAuth
+					}
+				}
+			})
     }
   }
 
   function googleAuth () {
     return {
       load: function () {
-        return new Promise(function (resolve, reject) {
-          if (window.gapi === undefined) {
-            installClient().then(function () {
-              return initClient()
-            }).then(function () {
-              resolve()
-            })
-          } else if (window.gapi !== undefined && window.gapi.auth2 === undefined) {
-            initClient().then(function () {
-              resolve()
-            })
-          }
-        })
+        installClient().then(function () {
+					initClient()
+				})
       },
 
       directAccess: function () {
@@ -71,19 +72,19 @@
   }
 
   function installClient () {
-    return new Promise(function (resolve, reject) {
-      var script = document.createElement('script')
-      script.src = gapiUrl
-      script.onreadystatechange = script.onload = function () {
-        if (!script.readyState || /loaded|complete/.test(script.readyState)) {
-          setTimeout(function () {
-            resolve()
-          }, 500)
-        }
-      }
-      document.getElementsByTagName('head')[0].appendChild(script)
-    })
-  }
+		return new Promise(function (resolve, reject) {
+			var script = document.createElement('script')
+			script.src = gapiUrl
+			script.onreadystatechange = script.onload = function () {
+				if (!script.readyState || /loaded|complete/.test(script.readyState)) {
+					setTimeout(function () {
+						resolve()
+					}, 500)
+				}
+			}
+			document.getElementsByTagName('head')[0].appendChild(script)
+		})
+	}
 
   function initClient () {
     return new Promise(function (resolve, reject) {
@@ -92,7 +93,15 @@
         resolve()
       })
     })
-  }
+	}
+	
+	function initClient () {
+		window.gapi.auth2.init(config)
+		.then(function () {
+			console.log('then initClient')
+				GoogleAuth = gapi.auth2.getAuthInstance()
+		})
+	}
 
   return gAuth
 }))
