@@ -1,14 +1,14 @@
 {
-  "name": "vue-google-oauth",
-  "version": "1.0.5",
-  "description": "Handling Google sign-in and sign-out",
+  "name": "vue-google-oauth2",
+  "version": "1.0.2",
+  "description": "Handling Google Auth2 sign-in and sign-out",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TinyNova/vue-google-oauth.git"
+    "url": "git+https://github.com/guruahn/vue-google-oauth2.git"
   },
   "keywords": [
     "vue",
@@ -18,12 +18,13 @@
     "signin",
     "signout",
     "login",
-    "logout"
+		"logout",
+		"oauth2"
   ],
-  "author": "Simmatrix Labs, Britton Mathews",
+  "author": "Jeongwoo Ahn",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/TinyNova/vue-google-oauth/issues"
+    "url": "https://github.com/guruahn/vue-google-oauth2/issues"
   },
-  "homepage": "https://github.com/TinyNova/vue-google-oauth#readme"
+  "homepage": "https://github.com/guruahn/vue-google-oauth2#readme"
 }
