@@ -1,97 +1,96 @@
-(function () {
-  function err (msg) {
-    typeof console !== 'undefined' && console.error(`[g-signin-button] ${msg}`)
-  }
-	var config = null
-	var GoogleAuth
-  var defaultConfig = { scope: 'profile email https://www.googleapis.com/auth/plus.login', discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'], }
-  var directAccess = false
-  var gapiUrl = 'https://apis.google.com/js/api.js'
+var googleAuth = (function () {
+    
+  var GoogleAuthInstance
 
-  var gAuth = {
-    install: function (Vue, options) {
-			//set config
-      if (typeof options === 'object') {
-				config = Object.assign(defaultConfig, options)
-				if(!options.clientId) {
-					console.warn('clientId is required')
-				}
-			}else{
-				console.warn('invalid option type. Object type accepted only')
-			}
-			
-			//Install Vue plugin
-			Vue.googleAuth = googleAuth
-      Vue.prototype.$googleAuth = googleAuth
-    }
+  function load (config) {
+    installClient().then(function () {
+      initClient(config)
+    })
   }
 
-  function googleAuth () {
-    return {
-      load: function () {
-        installClient().then(function () {
-					initClient()
-				})
-      },
+  function signIn (successCallback, errorCallback) {
+    GoogleAuthInstance.signIn().then(function (googleUser) {
+      successCallback(googleUser)
+    }, function (error) {
+      errorCallback(error)
+    })
+  }
 
-      directAccess: function () {
-        directAccess = true
-      },
+  function getAuthCode (successCallback, errorCallback) {
+    GoogleAuthInstance.grantOfflineAccess({prompt: 'consent'})
+    .then(function(resp) {
+      successCallback(resp.code)
+    })
+    .catch((error) => {
+      errorCallback(error)
+    })
+  }
 
-      signIn: function (successCallback, errorCallback) {
-        if (directAccess) {
-          GoogleAuth.signIn().then(function (googleUser) {
-            successCallback(googleUser)
-          }, function (error) {
-            errorCallback(error)
-          })
-        } else {
-					GoogleAuth.grantOfflineAccess({prompt: 'consent'})
-					.then(function(resp) {
-						successCallback(resp.code)
-					})
-					.catch((error) => {
-						errorCallback(error)
-					})
-        }
-      },
-
-      signOut: function (successCallback, errorCallback) {
-        GoogleAuth.signOut().then(function () {
-          successCallback()
-        }, function (error) {
-          errorCallback(error)
-        })
-      }
-    }
+  function signOut (successCallback, errorCallback) {
+    GoogleAuthInstance.signOut().then(function () {
+      successCallback()
+    }, function (error) {
+      errorCallback(error)
+    })
   }
 
   function installClient () {
-		return new Promise(function (resolve, reject) {
-			var script = document.createElement('script')
-			script.src = gapiUrl
-			script.onreadystatechange = script.onload = function () {
-				if (!script.readyState || /loaded|compvare/.test(script.readyState)) {
-					setTimeout(function () {
-						resolve()
-					}, 500)
-				}
-			}
-			document.getElementsByTagName('head')[0].appendChild(script)
-		})
-	}
-	
-	function initClient () {
-		window.gapi.auth2.init(config)
-		.then(function () {
-			GoogleAuth = gapi.auth2.getAuthInstance()
-		})
-	}
-
-  if (typeof exports === 'object') {
-    module.exports = gAuth.install
-  } else if (typeof define === 'function' && define.amd) {
-    /*global define*/
-    define([], function () { return gAuth.install })
+    var apiUrl = 'https://apis.google.com/js/api.js'
+    return new Promise(function (resolve, reject) {
+      var script = document.createElement('script')
+      script.src = apiUrl
+      script.onreadystatechange = script.onload = function () {
+        if (!script.readyState || /loaded|compvare/.test(script.readyState)) {
+          setTimeout(function () {
+            resolve()
+          }, 500)
+        }
+      }
+      document.getElementsByTagName('head')[0].appendChild(script)
+    })
   }
-})()
+  
+  function initClient (config) {
+    window.gapi.auth2.init(config)
+    .then(function () {
+      GoogleAuthInstance = gapi.auth2.getAuthInstance()
+    })
+  }
+
+  return {
+    load: load,
+    signIn: signIn,
+    getAuthCode: getAuthCode,
+    signOut: signOut,
+  }
+})();
+
+
+
+
+function installGoogleAuthPlugin (Vue, options) {
+  //set config
+  var GoogleAuthConfig = null
+  var GoogleAuthDefaultConfig = { scope: 'profile email https://www.googleapis.com/auth/plus.login', discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'], }
+  if (typeof options === 'object') {
+    GoogleAuthConfig = Object.assign(GoogleAuthDefaultConfig, options)
+    if(!options.clientId) {
+      console.warn('clientId is required')
+    }
+  }else{
+    console.warn('invalid option type. Object type accepted only')
+  }
+  
+  //Install Vue plugin
+  Vue.gAuth = googleAuth
+  Object.defineProperties(Vue.prototype, {
+    $gAuth: {
+      get: function () {
+        return Vue.gAuth
+      }
+    }
+  })
+  Vue.gAuth.load(GoogleAuthConfig)
+}
+
+export default installGoogleAuthPlugin

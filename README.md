@@ -12,33 +12,23 @@ npm install vue-google-oauth2
 
 ## Initialization
 ```
-import GoogleAuth from 'vue-google-oauth2'
+import GAuth from 'vue-google-oauth2'
 
-Vue.use(GoogleAuth, { client_id: 'xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com' })
-Vue.googleAuth().load()
+Vue.use(GAuth, {clientId: '458494958493-2gqknkvdjfkdfkvb8uja2k65sldsms7qo9.apps.googleusercontent.com'})
 ```
 Ideally you shall place this in your app entry file, e.g. src/main.js
 
 ## Usage - Sign-in
 ### (a) Handling Google sign-in, getting the one-time authorization code from Google
 ```
-import Vue from 'vue'
+this.$gAuth.getAuthCode(function (authCode) {
+	//on success
+	console.log('authCode', authCode)
+	this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' }).then(function (response) {
 
-Vue.googleAuth().signIn(function (authorizationCode) {
-
-  // things to do when sign-in succeeds
-
-  // You can send the authorizationCode to your backend server for further processing, for example
-  this.$http.post('http://your/backend/server', { code: authorizationCode, redirect_uri: 'postmessage' }).then(function (response) {
-    if (response.body) {
-      // ...
-    }
-  }, function (error) {
-    console.log(error)
-  })
-
+	})
 }, function (error) {
-  // things to do when sign-in fails
+	//on fail do something
 })
 ```
 
@@ -47,15 +37,11 @@ The `authorizationCode` that is being returned is the `one-time code` that you c
 
 ### (b) Alternatively, if you would like to directly get back the access_token and id_token
 ```
-import Vue from 'vue'
-
-// Just add in this line
-Vue.googleAuth().directAccess()
-
-Vue.googleAuth().signIn(function (googleUser) {
-  // things to do when sign-in succeeds
+this.$gAuth.signIn(function (user) {
+	//on success do something
+	console.log('user', user)
 }, function (error) {
-  // things to do when sign-in fails
+	//on fail do something
 })
 ```
 
