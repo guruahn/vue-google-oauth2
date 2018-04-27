@@ -68,9 +68,7 @@ The `googleUser` object that is being returned will be:
 ## Usage - Sign-out
 Handling Google sign-out
 ```
-import Vue from 'vue'
-
-Vue.googleAuth().signOut(function () {
+this.$gAuth.signOut(function () {
   // things to do when sign-out succeeds
 }, function (error) {
   // things to do when sign-out fails
@@ -78,7 +76,7 @@ Vue.googleAuth().signOut(function () {
 ```
 
 ## Additional Help
-Do refer to this [sample login page HTML file](https://github.com/TinyNova/vue-google-auth/blob/master/sample.html).
+Do refer to this [sample login page HTML file](https://github.com/guruahn/vue-google-auth2/blob/master/sample.html).
 
 If you are curious of how the entire Google sign-in flow works, please refer to the diagram below
 ![Google Sign-in Flow](http://i.imgur.com/BQPXKyT.png)
