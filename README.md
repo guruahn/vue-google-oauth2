@@ -11,28 +11,54 @@ npm install vue-google-oauth2
 ```
 
 ## Initialization
-```
+```javascript
 import GAuth from 'vue-google-oauth2'
 
-Vue.use(GAuth, {clientId: '458494958493-2gqknkvdjfkdfkvb8uja2k65sldsms7qo9.apps.googleusercontent.com'})
+Vue.use(GAuth, {clientId: '4XXXXXXXX93-2gqknkvdjfkdfkvb8uja2k65sldsms7qo9.apps.googleusercontent.com', scope: 'profile email https://www.googleapis.com/auth/plus.login'})
+
 ```
 Ideally you shall place this in your app entry file, e.g. src/main.js
 
 ## Usage - Sign-in
 ### (a) Handling Google sign-in, getting the one-time authorization code from Google
-```
-this.$gAuth.getAuthCode(function (authCode) {
+
+#### Backend-side(Vue.js)
+```javascript
+this.$gAuth.getAuthCode(function (authorizationCode) {
 	//on success
-	console.log('authCode', authCode)
-	this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' }).then(function (response) {
+	this.$http.post('http://your-backend-server.com/auth/google', { code: authorizationCode, redirect_uri: 'postmessage' }).then(function (response) {
 
 	})
 }, function (error) {
 	//on fail do something
 })
 ```
-
 The `authorizationCode` that is being returned is the `one-time code` that you can send to your backend server, so that the server can exchange for its own access token and refresh token.
+
+#### Backend-side(Golang)
+```go
+	auth_code := ac.Code //from front-end side
+	// generate a config of oauth
+	conf := &oauth2.Config{
+		ClientID:     "XXXXXXXX",
+		ClientSecret: "XXXXXXXX",
+		RedirectURL:  "postmessage",
+		Scopes: []string{
+			"profile",
+			"email",
+			"https://www.googleapis.com/auth/plus.login",
+		},
+		Endpoint: "XXXXXX",
+	}
+	// exchange to token inclued refresh_token from code
+	token, err = conf.Exchange(oauth2.NoContext, auth_code)
+	if err != nil {
+			sErr := NewStatusErr(401, err.Error(), "Unauthorized")
+			return nil, &sErr
+	}
+```
+Note, ```RedirectURL``` must be ```postmessage```!!
+
 
 
 ### (b) Alternatively, if you would like to directly get back the access_token and id_token
