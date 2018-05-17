@@ -22,7 +22,7 @@ Ideally you shall place this in your app entry file, e.g. src/main.js
 ## Usage - Sign-in
 ### (a) Handling Google sign-in, getting the one-time authorization code from Google
 
-#### Backend-side(Vue.js)
+#### Frontend-side(Vue.js)
 ```javascript
 this.$gAuth.getAuthCode(function (authorizationCode) {
 	//on success
@@ -37,25 +37,25 @@ The `authorizationCode` that is being returned is the `one-time code` that you c
 
 #### Backend-side(Golang)
 ```go
-	auth_code := ac.Code //from front-end side
-	// generate a config of oauth
-	conf := &oauth2.Config{
-		ClientID:     "XXXXXXXX",
-		ClientSecret: "XXXXXXXX",
-		RedirectURL:  "postmessage",
-		Scopes: []string{
-			"profile",
-			"email",
-			"https://www.googleapis.com/auth/plus.login",
-		},
-		Endpoint: "XXXXXX",
-	}
-	// exchange to token inclued refresh_token from code
-	token, err = conf.Exchange(oauth2.NoContext, auth_code)
-	if err != nil {
-			sErr := NewStatusErr(401, err.Error(), "Unauthorized")
-			return nil, &sErr
-	}
+auth_code := ac.Code //from front-end side
+// generate a config of oauth
+conf := &oauth2.Config{
+	ClientID:     "XXXXXXXX",
+	ClientSecret: "XXXXXXXX",
+	RedirectURL:  "postmessage",
+	Scopes: []string{
+		"profile",
+		"email",
+		"https://www.googleapis.com/auth/plus.login",
+	},
+	Endpoint: "XXXXXX",
+}
+// exchange to token inclued refresh_token from code
+token, err = conf.Exchange(oauth2.NoContext, auth_code)
+if err != nil {
+		sErr := NewStatusErr(401, err.Error(), "Unauthorized")
+		return nil, &sErr
+}
 ```
 Note, ```RedirectURL``` must be ```postmessage```!!
 
