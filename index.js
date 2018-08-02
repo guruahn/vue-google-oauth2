@@ -21,7 +21,7 @@ var googleAuth = (function () {
     .then(function(resp) {
       successCallback(resp.code)
     })
-    .catch((error) => {
+    .catch(function(error) {
       errorCallback(error)
     })
   }
