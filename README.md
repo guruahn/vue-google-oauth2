@@ -1,18 +1,20 @@
-# vue-google-oauth2
+# vue-google-oauth2-gapi
 Handling Google sign-in and sign-out for Vue.js applications
 
-Forked from https://github.com/TinyNova/vue-google-oauth
+Forked from https://github.com/guruahn/vue-google-oauth2
 
 Same as fork but allows you to override options and a few other bug fixes.
 
+This package contains Google API script loading before calling that (it was required for my project and I wasn't able to wait for merge my PR into repository forked from)
+
 ## Installation
 ```
-npm install vue-google-oauth2
+npm install vue-google-oauth2-gapi
 ```
 
 ## Initialization
 ```javascript
-import GAuth from 'vue-google-oauth2'
+import GAuth from 'vue-google-oauth2-gapi'
 
 Vue.use(GAuth, {clientId: '4XXXXXXXX93-2gqknkvdjfkdfkvb8uja2k65sldsms7qo9.apps.googleusercontent.com', scope: 'profile email https://www.googleapis.com/auth/plus.login'})
 
@@ -102,7 +104,7 @@ this.$gAuth.signOut(function () {
 ```
 
 ## Additional Help
-Do refer to this [sample login page HTML file](https://github.com/guruahn/vue-google-oauth2/blob/master/sample.html).
+Do refer to this [sample login page HTML file](https://github.com/wat4dog/vue-google-oauth2/blob/master/sample.html).
 
 If you are curious of how the entire Google sign-in flow works, please refer to the diagram below
 ![Google Sign-in Flow](http://i.imgur.com/BQPXKyT.png)
