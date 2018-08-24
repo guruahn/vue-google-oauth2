@@ -1,9 +1,11 @@
-# vue-google-oauth2
+# vue-google-oauth2-gapi
 Handling Google sign-in and sign-out for Vue.js applications
 
 Forked from https://github.com/guruahn/vue-google-oauth2
 
 Same as fork but allows you to override options and a few other bug fixes.
+
+This package contains Google API script loading before calling that (it was required for my project and I wasn't able to wait for merge my PR into repository forked from)
 
 ## Installation
 ```
