@@ -51,9 +51,11 @@ var googleAuth = (function () {
   }
   
   function initClient (config) {
-    window.gapi.auth2.init(config)
-    .then(function () {
-      GoogleAuthInstance = gapi.auth2.getAuthInstance()
+    window.gapi.load('auth2', function() {
+      window.gapi.auth2.init(config)
+      .then(function () {
+        GoogleAuthInstance = gapi.auth2.getAuthInstance()
+      })
     })
   }
 
