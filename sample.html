@@ -1,8 +1,8 @@
 <template>
   <div>
     <h1>Test</h1>
-    <button @click="handleClickGetAuth">get auth code</button>
-    <button @click="handleClickSignIn">signIn</button>
+    <button @click="handleClickGetAuth" :disabled="!isLoaded">get auth code</button>
+    <button @click="handleClickSignIn" :disabled="!isLoaded">signIn</button>
   </div>
 </template>
 
@@ -11,7 +11,7 @@
 * You should first need to place these 2 lines of code in your APP ENTRY file, e.g. src/main.js
 *
 * import GAuth from 'vue-google-oauth2'
-* Vue.use(GAuth, {clientId: '458494958493-2gqknkvdjfkdfkvb8uja2k65sldsms7qo9.apps.googleusercontent.com'})
+* Vue.use(GAuth, {clientId: '4584XXXXXXXX-2gqknkvdjfkdfkvb8uja2k65sldsms7qo9.apps.googleusercontent.com'})
 * 
 */
 export default {
@@ -22,7 +22,7 @@ export default {
   },
   data () {
     return {
-      
+      isLoaded: false
     }
   },
   computed: {
@@ -52,7 +52,12 @@ export default {
     }
   },
   mounted(){
-    
+    let that = this
+    let checkGauthLoad = setInterval(function(){
+      that.isLoaded = that.$gAuth.isLoaded()
+      console.log('checked', that.isLoaded)
+      if(that.isLoaded) clearInterval(checkGauthLoad)
+    }, 1000);
   }
   
 }

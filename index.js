@@ -2,6 +2,10 @@ var googleAuth = (function () {
     
   var GoogleAuthInstance
 
+  function isLoaded () {
+      return !!GoogleAuthInstance
+  }
+
   function load (config) {
     installClient().then(function () {
       initClient(config)
@@ -9,14 +13,24 @@ var googleAuth = (function () {
   }
 
   function signIn (successCallback, errorCallback) {
-    GoogleAuthInstance.signIn().then(function (googleUser) {
+    if(!GoogleAuthInstance) {
+      errorCallback(false)
+      return
+    }
+    GoogleAuthInstance.signIn()
+    .then(function (googleUser) {
       successCallback(googleUser)
-    }, function (error) {
+    })
+    .catch(function(error) {
       errorCallback(error)
     })
   }
 
   function getAuthCode (successCallback, errorCallback) {
+    if(!GoogleAuthInstance) {
+      errorCallback(false)
+      return
+    }
     GoogleAuthInstance.grantOfflineAccess({prompt: 'consent'})
     .then(function(resp) {
       successCallback(resp.code)
@@ -27,9 +41,15 @@ var googleAuth = (function () {
   }
 
   function signOut (successCallback, errorCallback) {
-    GoogleAuthInstance.signOut().then(function () {
+    if(!GoogleAuthInstance) {
+      errorCallback(false)
+      return
+    }
+    GoogleAuthInstance.signOut()
+    .then(function () {
       successCallback()
-    }, function (error) {
+    })
+    .catch(function(error) {
       errorCallback(error)
     })
   }
@@ -64,6 +84,7 @@ var googleAuth = (function () {
     signIn: signIn,
     getAuthCode: getAuthCode,
     signOut: signOut,
+    isLoaded: isLoaded
   }
 })();
 
