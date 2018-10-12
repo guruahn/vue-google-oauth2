@@ -113,7 +113,7 @@ Handling Check Google api loaded
 <script>
   data () {
     return {
-	  isLoaded: false
+      isLoaded: false
     }
   },
   methods: {
@@ -132,7 +132,6 @@ Handling Check Google api loaded
     let that = this
     let checkGauthLoad = setInterval(function(){
       that.isLoaded = that.$gAuth.isLoaded()
-      console.log('checked', that.isLoaded)
       if(that.isLoaded) clearInterval(checkGauthLoad)
     }, 1000);
   }

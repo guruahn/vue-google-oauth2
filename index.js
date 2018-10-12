@@ -14,6 +14,7 @@ var googleAuth = (function () {
 
   function signIn (successCallback, errorCallback) {
     if(!GoogleAuthInstance) {
+      console.warn("google api is not ready")
       errorCallback(false)
       return
     }
@@ -28,6 +29,7 @@ var googleAuth = (function () {
 
   function getAuthCode (successCallback, errorCallback) {
     if(!GoogleAuthInstance) {
+      console.warn("google api is not ready")
       errorCallback(false)
       return
     }
@@ -42,6 +44,7 @@ var googleAuth = (function () {
 
   function signOut (successCallback, errorCallback) {
     if(!GoogleAuthInstance) {
+      console.warn("google api is not ready")
       errorCallback(false)
       return
     }
