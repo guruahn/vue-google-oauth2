@@ -62,7 +62,7 @@ Note, ```RedirectURL``` must be ```postmessage```!!
 
 
 ### (b) Alternatively, if you would like to directly get back the access_token and id_token
-```
+```javascript
 this.$gAuth.signIn(function (user) {
 	//on success do something
 	console.log('user', user)
@@ -72,7 +72,7 @@ this.$gAuth.signIn(function (user) {
 ```
 
 The `googleUser` object that is being returned will be:
-```
+```javascript
 {
   "token_type": "Bearer",
   "access_token": "xxx",
@@ -93,12 +93,50 @@ The `googleUser` object that is being returned will be:
 
 ## Usage - Sign-out
 Handling Google sign-out
-```
+```javascript
 this.$gAuth.signOut(function () {
   // things to do when sign-out succeeds
 }, function (error) {
   // things to do when sign-out fails
 })
+```
+
+## Usage - Check api loaded
+Handling Check Google api loaded
+```html
+<template>
+  <div>
+    <h1>Test</h1>
+    <button @click="handleClickGetAuth" :disabled="!isLoaded">get auth code</button>
+  </div>
+</template>
+<script>
+  data () {
+    return {
+	  isLoaded: false
+    }
+  },
+  methods: {
+    handleClickGetAuth(){
+      this.$gAuth.getAuthCode(function (authCode) {
+        //on success
+        this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' }).then(function (response) {
+
+        })
+      }, function (error) {
+        //on fail do something
+      })
+    },
+  },
+  mounted(){
+    let that = this
+    let checkGauthLoad = setInterval(function(){
+      that.isLoaded = that.$gAuth.isLoaded()
+      console.log('checked', that.isLoaded)
+      if(that.isLoaded) clearInterval(checkGauthLoad)
+    }, 1000);
+  }
+</script>
 ```
 
 ## Additional Help

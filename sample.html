@@ -33,7 +33,6 @@ export default {
     handleClickGetAuth(){
       this.$gAuth.getAuthCode(function (authCode) {
         //on success
-        console.log('authCode', authCode)
         this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' }).then(function (response) {
 
         })
