@@ -1,65 +1,9 @@
+
 var googleAuth = (function () {
-    
-  var GoogleAuthInstance
-
-  function isLoaded () {
-      return !!GoogleAuthInstance
-  }
-
-  function load (config) {
-    installClient().then(function () {
-      initClient(config)
-    })
-  }
-
-  function signIn (successCallback, errorCallback) {
-    if(!GoogleAuthInstance) {
-      console.warn("google api is not ready")
-      errorCallback(false)
-      return
-    }
-    GoogleAuthInstance.signIn()
-    .then(function (googleUser) {
-      successCallback(googleUser)
-    })
-    .catch(function(error) {
-      errorCallback(error)
-    })
-  }
-
-  function getAuthCode (successCallback, errorCallback) {
-    if(!GoogleAuthInstance) {
-      console.warn("google api is not ready")
-      errorCallback(false)
-      return
-    }
-    GoogleAuthInstance.grantOfflineAccess({prompt: 'consent'})
-    .then(function(resp) {
-      successCallback(resp.code)
-    })
-    .catch(function(error) {
-      errorCallback(error)
-    })
-  }
-
-  function signOut (successCallback, errorCallback) {
-    if(!GoogleAuthInstance) {
-      console.warn("google api is not ready")
-      errorCallback(false)
-      return
-    }
-    GoogleAuthInstance.signOut()
-    .then(function () {
-      successCallback()
-    })
-    .catch(function(error) {
-      errorCallback(error)
-    })
-  }
 
   function installClient () {
     var apiUrl = 'https://apis.google.com/js/api.js'
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve) => {
       var script = document.createElement('script')
       script.src = apiUrl
       script.onreadystatechange = script.onload = function () {
@@ -72,28 +16,101 @@ var googleAuth = (function () {
       document.getElementsByTagName('head')[0].appendChild(script)
     })
   }
-  
+
   function initClient (config) {
-    window.gapi.load('auth2', function() {
-      window.gapi.auth2.init(config)
-      .then(function () {
-        GoogleAuthInstance = gapi.auth2.getAuthInstance()
+    return new Promise((resolve) => {
+      window.gapi.load('auth2', () => {
+        window.gapi.auth2.init(config)
+        .then(() => {
+          resolve(window.gapi.auth2.getAuthInstance())
+        })
       })
     })
+    
+  }
+    
+
+  let Auth = {
+    GoogleAuthInstance: null,
+    isLoaded() {
+      return !!this.GoogleAuthInstance
+    },
+    load(config) {
+      installClient()
+      .then(() => {
+        return initClient(config)
+      })
+      .then((instance) => {
+        this.GoogleAuthInstance = instance
+      })
+    },
+    
+    signIn (successCallback, errorCallback) {
+      return new Promise((resolve, reject) => {
+        if(!this.GoogleAuthInstance) {
+          if(typeof errorCallback === 'function') errorCallback(false)
+          reject(false)
+          return
+        }
+        this.GoogleAuthInstance.signIn()
+        .then(function (googleUser) {
+          if(typeof successCallback === 'function') successCallback(googleUser)
+          resolve(googleUser)
+        })
+        .catch(function(error) {
+          if(typeof errorCallback === 'function') errorCallback(error)
+          reject(error)
+        })
+      })
+    },
+    getAuthCode (successCallback, errorCallback) {
+      return new Promise((resolve, reject) => {
+        if(!this.GoogleAuthInstance) {
+          if(typeof errorCallback === 'function') errorCallback(false)
+          reject(false)
+          return
+        }
+        this.GoogleAuthInstance.grantOfflineAccess({prompt: 'consent'})
+        .then(function(resp) {
+          if(typeof successCallback === 'function') successCallback(resp.code)
+          resolve(resp.code)
+        })
+        .catch(function(error) {
+          if(typeof errorCallback === 'function') errorCallback(error)
+          reject(error)
+        })
+      })
+      
+    },
+    signOut (successCallback, errorCallback) {
+      return new Promise((resolve, reject) => {
+        if(!this.GoogleAuthInstance) {
+          if(typeof errorCallback === 'function') errorCallback(false)
+          reject(false)
+          return
+        }
+        this.GoogleAuthInstance.signOut()
+        .then(function () {
+          if(typeof successCallback === 'function') successCallback()
+          resolve()
+        })
+        .catch(function(error) {
+          if(typeof errorCallback === 'function') errorCallback(error)
+          reject(error)
+        })
+      })
+    }
   }
 
-  return {
-    load: load,
-    signIn: signIn,
-    getAuthCode: getAuthCode,
-    signOut: signOut,
-    isLoaded: isLoaded
-  }
+  
+  
+
+  return Auth
 })();
-
-
-
-
+  
+  
+  
+  
 function installGoogleAuthPlugin (Vue, options) {
   //set config
   var GoogleAuthConfig = null
@@ -101,6 +118,7 @@ function installGoogleAuthPlugin (Vue, options) {
   if (typeof options === 'object') {
     GoogleAuthConfig = Object.assign(GoogleAuthDefaultConfig, options)
     if(!options.clientId) {
+      /* eslint-disable */
       console.warn('clientId is required')
     }
   }else{

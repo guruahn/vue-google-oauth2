@@ -31,21 +31,26 @@ export default {
 
   methods: {
     handleClickGetAuth(){
-      this.$gAuth.getAuthCode(function (authCode) {
+      this.$gAuth.getAuthCode()
+      .then(authCode => {
         //on success
-        this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' }).then(function (response) {
-
-        })
-      }, function (error) {
+        return this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' })
+      })
+      .then(response => {
+        //and then
+      })
+      .catch(error => {
         //on fail do something
       })
     },
 
     handleClickSignIn(){
-      this.$gAuth.signIn(function (user) {
+      this.$gAuth.signIn()
+      .then(user => {
         //on success do something
         console.log('user', user)
-      }, function (error) {
+      })
+      .catch(error  => {
         //on fail do something
       })
     }
