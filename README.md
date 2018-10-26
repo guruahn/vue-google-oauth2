@@ -68,9 +68,9 @@ Note, ```RedirectURL``` must be ```postmessage```!!
 
 ```javascript
 this.$gAuth.signIn()
-.then(user => {
+.then(GoogleUser => {
   //on success do something
-  console.log('user', user)
+  console.log('GoogleUser', GoogleUser)
 })
 .catch(error  => {
   //on fail do something
@@ -96,6 +96,7 @@ The `googleUser` object that is being returned will be:
   "idpId": "google"
 }
 ```
+refer to [google signIn reference : users](https://developers.google.com/identity/sign-in/web/reference#users)
 
 ## Usage - Sign-out
 Handling Google sign-out
@@ -151,7 +152,7 @@ Handling Check Google api loaded
 ```
 
 ## Additional Help
-Do refer to this [sample login page HTML file](https://github.com/guruahn/vue-google-oauth2/blob/master/sample.html).
-
-If you are curious of how the entire Google sign-in flow works, please refer to the diagram below
+- [sample login page HTML file](https://github.com/guruahn/vue-google-oauth2/blob/master/sample.html).
+- [sign-in web reference](https://developers.google.com/identity/sign-in/web/reference)
+- If you are curious of how the entire Google sign-in flow works, please refer to the diagram below
 ![Google Sign-in Flow](http://i.imgur.com/BQPXKyT.png)

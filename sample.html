@@ -47,7 +47,7 @@ export default {
     handleClickSignIn(){
       this.$gAuth.signIn()
       .then(user => {
-        //on success do something
+        //on success do something, refer to https://developers.google.com/identity/sign-in/web/reference#users
         console.log('user', user)
       })
       .catch(error  => {
