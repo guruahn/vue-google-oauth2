@@ -70,7 +70,7 @@ var googleAuth = (function () {
           reject(false)
           return
         }
-        this.GoogleAuthInstance.grantOfflineAccess({prompt: 'consent'})
+        this.GoogleAuthInstance.grantOfflineAccess({prompt: 'select_account'})
         .then(function(resp) {
           if(typeof successCallback === 'function') successCallback(resp.code)
           resolve(resp.code)
