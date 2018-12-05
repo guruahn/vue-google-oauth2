@@ -22,55 +22,70 @@ var googleAuth = (function () {
       window.gapi.load('auth2', () => {
         window.gapi.auth2.init(config)
         .then(() => {
-          resolve(window.gapi.auth2.getAuthInstance())
+          resolve(window.gapi)
         })
       })
     })
     
   }
-    
+  
+  function Auth(){
+    if(!(this instanceof Auth))
+      return new Auth()
+    this.Gapi = null /* window.gapi */
+    this.GoogleAuth = null /* window.gapi.auth2.getAuthInstance() */
+    this.isAuthorized = false
+    this.config = null
+    this.isInit = false
 
-  let Auth = {
-    GoogleAuthInstance: null,
-    isLoaded() {
-      return !!this.GoogleAuthInstance
-    },
-    load(config) {
+    this.isLoaded = function(){
+      /* eslint-disable */
+      console.warn('isLoaded() will be deprecated. You can use "this.$gAuth.isInit"')
+      return !!this.GoogleAuth
+    };
+
+    this.load = (config) => {
+      this.config = config
       installClient()
       .then(() => {
         return initClient(config)
       })
-      .then((instance) => {
-        this.GoogleAuthInstance = instance
+      .then((gapi) => {
+        this.Gapi = gapi
+        this.GoogleAuth = gapi.auth2.getAuthInstance()
+        this.isInit = true
+        this.isAuthorized = this.GoogleAuth.isSignedIn.get()
       })
-    },
-    
-    signIn (successCallback, errorCallback) {
+    };
+
+    this.signIn = (successCallback, errorCallback) => {
       return new Promise((resolve, reject) => {
-        if(!this.GoogleAuthInstance) {
+        if(!this.GoogleAuth) {
           if(typeof errorCallback === 'function') errorCallback(false)
           reject(false)
           return
         }
-        this.GoogleAuthInstance.signIn()
-        .then(function (googleUser) {
+        this.GoogleAuth.signIn()
+        .then(googleUser => {
           if(typeof successCallback === 'function') successCallback(googleUser)
+          this.isAuthorized = this.GoogleAuth.isSignedIn.get()
           resolve(googleUser)
         })
-        .catch(function(error) {
+        .catch(error => {
           if(typeof errorCallback === 'function') errorCallback(error)
           reject(error)
         })
       })
-    },
-    getAuthCode (successCallback, errorCallback) {
+    };
+
+    this.getAuthCode =  (successCallback, errorCallback) => {
       return new Promise((resolve, reject) => {
-        if(!this.GoogleAuthInstance) {
+        if(!this.GoogleAuth) {
           if(typeof errorCallback === 'function') errorCallback(false)
           reject(false)
           return
         }
-        this.GoogleAuthInstance.grantOfflineAccess({prompt: 'select_account'})
+        this.GoogleAuth.grantOfflineAccess({prompt: 'select_account'})
         .then(function(resp) {
           if(typeof successCallback === 'function') successCallback(resp.code)
           resolve(resp.code)
@@ -80,32 +95,30 @@ var googleAuth = (function () {
           reject(error)
         })
       })
-      
-    },
-    signOut (successCallback, errorCallback) {
+    };
+
+    this.signOut = (successCallback, errorCallback) => {
       return new Promise((resolve, reject) => {
-        if(!this.GoogleAuthInstance) {
+        if(!this.GoogleAuth) {
           if(typeof errorCallback === 'function') errorCallback(false)
           reject(false)
           return
         }
-        this.GoogleAuthInstance.signOut()
-        .then(function () {
+        this.GoogleAuth.signOut()
+        .then(() => {
           if(typeof successCallback === 'function') successCallback()
-          resolve()
+          this.isAuthorized = false
+          resolve(true)
         })
-        .catch(function(error) {
+        .catch(error => {
           if(typeof errorCallback === 'function') errorCallback(error)
           reject(error)
         })
       })
-    }
+    };
   }
 
-  
-  
-
-  return Auth
+  return new Auth()
 })();
   
   
