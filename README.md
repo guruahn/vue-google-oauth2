@@ -23,7 +23,7 @@ Vue.use(GAuth, {clientId: '4XXXXXXXX93-2gqknkvdjfkdfkvb8uja2k65sldsms7qo9.apps.g
 | GoogleAuth   | return of gapi.auth2.getAuthInstance()   | Object |
 | isAuthorized | Whether or not you have auth | Boolean  |
 | isInit       | Whether or not api init | Boolean  |
-| isLoaded     | Whether or not api init | Function  |
+| isLoaded     | Whether or not api init. will be deprecated. | Function  |
 | signIn       | function for sign-in | Function  |
 | getAuthCode  | function for getting authCode | Function  |
 | signOut      | function for sign-out | Function  |
