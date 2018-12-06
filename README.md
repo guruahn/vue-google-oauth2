@@ -1,9 +1,7 @@
 # vue-google-oauth2
 Handling Google sign-in and sign-out for Vue.js applications.
-
 Forked from https://github.com/TinyNova/vue-google-oauth
 
-Same as fork but allows you to use google-oauth2.
 
 ## Installation
 ```
@@ -19,10 +17,21 @@ Vue.use(GAuth, {clientId: '4XXXXXXXX93-2gqknkvdjfkdfkvb8uja2k65sldsms7qo9.apps.g
 
 ```
 
-## Usage - Sign-in
-### (a) Handling Google sign-in, getting the one-time authorization code from Google
+## Property
+| Property     | Description        | Type     |
+|--------------|--------------------|----------|
+| GoogleAuth   | return of gapi.auth2.getAuthInstance()   | Object |
+| isAuthorized | Whether or not you have auth | Boolean  |
+| isInit       | Whether or not api init | Boolean  |
+| isLoaded     | Whether or not api init | Function  |
+| signIn       | function for sign-in | Function  |
+| getAuthCode  | function for getting authCode | Function  |
+| signOut      | function for sign-out | Function  |
 
-#### Frontend-side(Vue.js)
+## Usage - Getting authorization code
+>The `authCode` that is being returned is the `one-time code` that you can send to your backend server, so that the server can exchange for its own access_token and refresh_token.
+
+### Frontend-side(Vue.js)
 ```javascript
 this.$gAuth.getAuthCode()
 .then(authCode => {
@@ -36,9 +45,9 @@ this.$gAuth.getAuthCode()
   //on fail do something
 })
 ```
-The `authCode` that is being returned is the `one-time code` that you can send to your backend server, so that the server can exchange for its own access token and refresh token.
 
-#### Backend-side(Golang)
+
+### Backend-side(Golang)
 ```go
 auth_code := ac.Code //from front-end side
 // generate a config of oauth
@@ -64,39 +73,21 @@ Note, ```RedirectURL``` must be ```postmessage```!!
 
 
 
-### (b) Alternatively, if you would like to directly get back the access_token and id_token
+## Usage - Directly get back the access_token and id_token or use api request
 
 ```javascript
 this.$gAuth.signIn()
 .then(GoogleUser => {
-  //on success do something
-  console.log('GoogleUser', GoogleUser)
+  // On success do something, refer to https://developers.google.com/api-client-library/javascript/reference/referencedocs#googleusergetid
+  console.log('user', GoogleUser)
+  this.isSignIn = this.$gAuth.isAuthorized
 })
 .catch(error  => {
   //on fail do something
 })
 ```
 
-The `googleUser` object that is being returned will be:
-```javascript
-{
-  "token_type": "Bearer",
-  "access_token": "xxx",
-  "scope": "xxx",
-  "login_hint": "xxx",
-  "expires_in": 3600,
-  "id_token": "xxx",
-  "session_state": {
-    "extraQueryParams": {
-      "authuser": "0"
-    }
-  },
-  "first_issued_at": 1234567891011,
-  "expires_at": 1234567891011,
-  "idpId": "google"
-}
-```
-refer to [google signIn reference : users](https://developers.google.com/identity/sign-in/web/reference#users)
+refer to [google signIn reference : GoogleUser](https://developers.google.com/api-client-library/javascript/reference/referencedocs#googleusergetid)
 
 ## Usage - Sign-out
 Handling Google sign-out
@@ -111,48 +102,8 @@ this.$gAuth.signOut()
 })
 ```
 
-## Usage - Check api loaded
-Handling Check Google api loaded
-```html
-<template>
-  <div>
-    <h1>Test</h1>
-    <button @click="handleClickGetAuth" :disabled="!isLoaded">get auth code</button>
-  </div>
-</template>
-<script>
-  data () {
-    return {
-      isLoaded: false
-    }
-  },
-  methods: {
-    handleClickGetAuth(){
-      this.$gAuth.getAuthCode()
-      .then(authCode => {
-        //on success
-        return this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' })
-      })
-      .then(response => {
-        //and then
-      })
-      .catch(error => {
-        //on fail do something
-      })
-    },
-  },
-  mounted(){
-    let that = this
-    let checkGauthLoad = setInterval(function(){
-      that.isLoaded = that.$gAuth.isLoaded()
-      if(that.isLoaded) clearInterval(checkGauthLoad)
-    }, 1000);
-  }
-</script>
-```
-
 ## Additional Help
 - [sample login page HTML file](https://github.com/guruahn/vue-google-oauth2/blob/master/sample.html).
-- [sign-in web reference](https://developers.google.com/identity/sign-in/web/reference)
+- [Google API Client Libraries : Methods and Classes](https://developers.google.com/api-client-library/javascript/reference/referencedocs)
 - If you are curious of how the entire Google sign-in flow works, please refer to the diagram below
 ![Google Sign-in Flow](http://i.imgur.com/BQPXKyT.png)

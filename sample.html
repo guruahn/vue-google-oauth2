@@ -3,7 +3,7 @@
     <h1>Test</h1>
     <button @click="handleClickGetAuth" :disabled="!isInit">get auth code</button>
     <button @click="handleClickSignIn" v-if="!isSignIn" :disabled="!isInit">signIn</button>
-    <button @click="handleClickSignOut" v-if="isSignIn" :disabled="!isInit">sign out</button>
+    <button @click="handleClickSignOut" v-if="isSignIn" :disabled="!isInit">signOout</button>
   </div>
 </template>
 
@@ -42,14 +42,8 @@ export default {
     handleClickSignIn(){
       this.$gAuth.signIn()
       .then(user => {
-        // On success do something, refer to https://developers.google.com/identity/sign-in/web/reference#users
-        console.log('user', user)
-        // You can execute API, refer to https://developers.google.com/identity/protocols/googlescopes
-        var request = this.Gapi.client.request({
-          'method': 'GET',
-          'path': '/drive/v3/about',
-          'params': {'fields': 'user'}
-        });
+        // On success do something, refer to https://developers.google.com/api-client-library/javascript/reference/referencedocs#googleusergetid
+        console.log('user', GoogleUser)
         this.isSignIn = this.$gAuth.isAuthorized
       })
       .catch(error  => {

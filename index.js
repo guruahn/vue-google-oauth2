@@ -32,10 +32,8 @@ var googleAuth = (function () {
   function Auth(){
     if(!(this instanceof Auth))
       return new Auth()
-    this.Gapi = null /* window.gapi */
     this.GoogleAuth = null /* window.gapi.auth2.getAuthInstance() */
     this.isAuthorized = false
-    this.config = null
     this.isInit = false
 
     this.isLoaded = function(){
@@ -45,15 +43,14 @@ var googleAuth = (function () {
     };
 
     this.load = (config) => {
-      this.config = config
       installClient()
       .then(() => {
         return initClient(config)
       })
       .then((gapi) => {
-        this.Gapi = gapi
         this.GoogleAuth = gapi.auth2.getAuthInstance()
         this.isInit = true
+        
         this.isAuthorized = this.GoogleAuth.isSignedIn.get()
       })
     };
