@@ -35,14 +35,14 @@ var googleAuth = (function () {
     this.GoogleAuth = null /* window.gapi.auth2.getAuthInstance() */
     this.isAuthorized = false
     this.isInit = false
-
+    this.prompt = null
     this.isLoaded = function(){
       /* eslint-disable */
       console.warn('isLoaded() will be deprecated. You can use "this.$gAuth.isInit"')
       return !!this.GoogleAuth
     };
 
-    this.load = (config) => {
+    this.load = (config, prompt) => {
       installClient()
       .then(() => {
         return initClient(config)
@@ -50,7 +50,7 @@ var googleAuth = (function () {
       .then((gapi) => {
         this.GoogleAuth = gapi.auth2.getAuthInstance()
         this.isInit = true
-        
+        this.prompt = prompt  
         this.isAuthorized = this.GoogleAuth.isSignedIn.get()
       })
     };
@@ -82,7 +82,7 @@ var googleAuth = (function () {
           reject(false)
           return
         }
-        this.GoogleAuth.grantOfflineAccess({prompt: 'select_account'})
+        this.GoogleAuth.grantOfflineAccess({prompt: this.prompt})
         .then(function(resp) {
           if(typeof successCallback === 'function') successCallback(resp.code)
           resolve(resp.code)
@@ -123,10 +123,13 @@ var googleAuth = (function () {
   
 function installGoogleAuthPlugin (Vue, options) {
   //set config
-  var GoogleAuthConfig = null
-  var GoogleAuthDefaultConfig = { scope: 'profile email https://www.googleapis.com/auth/plus.login', discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'], }
+  let GoogleAuthConfig = null
+  let GoogleAuthDefaultConfig = { scope: 'profile email', discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']}
+  let prompt = 'select_account'
   if (typeof options === 'object') {
     GoogleAuthConfig = Object.assign(GoogleAuthDefaultConfig, options)
+    if(options.scope) GoogleAuthConfig.scope = options.scope
+    if(options.prompt) prompt = options.prompt
     if(!options.clientId) {
       /* eslint-disable */
       console.warn('clientId is required')
@@ -144,7 +147,7 @@ function installGoogleAuthPlugin (Vue, options) {
       }
     }
   })
-  Vue.gAuth.load(GoogleAuthConfig)
+  Vue.gAuth.load(GoogleAuthConfig, prompt)
 }
 
 export default installGoogleAuthPlugin

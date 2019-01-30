@@ -6,18 +6,31 @@ Forked from https://github.com/TinyNova/vue-google-oauth
 ## Installation
 ```
 npm install vue-google-oauth2
+yarn add vue-google-oauth2
 ```
 
 ## Initialization
 ```javascript
 //src/main.js
 import GAuth from 'vue-google-oauth2'
-
-Vue.use(GAuth, {clientId: '4XXXXXXXX93-2gqknkvdjfkdfkvb8uja2k65sldsms7qo9.apps.googleusercontent.com', scope: 'profile email https://www.googleapis.com/auth/plus.login'})
+const gauthOption = {
+  clientId: 'CLIENT_ID.apps.googleusercontent.com',
+  scope: 'profile email',
+  prompt: 'select_account'
+}
+Vue.use(GAuth, gauthOption)
 
 ```
+Please Don't use `plus.login` scope. [It will be deprecated.](https://developers.google.com/identity/sign-in/web/quick-migration-guide)
 
-## Property
+### Options
+| Property     | Type     | Required        | Description     |
+|--------------|----------|-----------------|-----------------|
+| clientId     | String   | Required.       | The app's client ID, found and created in the Google Developers Console. |
+| scope        | String   | Optional.       | Default value is 'profile email' |
+| prompt       | String   | Optional.       | [This value using for authCode.](https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2offlineaccessoptions) The possible values are 'select_account' or 'consent'. Default value is 'select_account'. |
+
+## Methods
 | Property     | Description        | Type     |
 |--------------|--------------------|----------|
 | GoogleAuth   | return of gapi.auth2.getAuthInstance()   | Object |
