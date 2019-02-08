@@ -84,6 +84,34 @@ if err != nil {
 ```
 Note, ```RedirectURL``` must be ```postmessage```!!
 
+### Backend-side(Python)
+```python
+# more info at https://developers.google.com/identity/sign-in/web/server-side-flow?authuser=1
+from apiclient import discovery
+import httplib2
+from oauth2client import client
+
+# (Receive auth_code by HTTPS POST)
+
+
+# If this request does not have `X-Requested-With` header, this could be a CSRF
+# if not request.headers.get('X-Requested-With'):
+#    abort(403)
+
+# Set path to the Web application client_secret_*.json file you downloaded from the
+# Google API Console: https://console.developers.google.com/apis/credentials
+CLIENT_SECRET_FILE = '/path/to/client_secret.json'
+
+# Exchange auth code for access token, refresh token, and ID token
+credentials = client.credentials_from_clientsecrets_and_code(
+    CLIENT_SECRET_FILE,
+    ['https://www.googleapis.com/auth/drive.appdata', 'profile', 'email'],
+    auth_code)
+
+# Get profile info from ID token
+userid = credentials.id_token['sub']
+email = credentials.id_token['email']
+```
 
 
 ## Usage - Directly get back the access_token and id_token or use api request
