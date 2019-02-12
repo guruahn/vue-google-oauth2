@@ -28,7 +28,7 @@ Please Don't use `plus.login` scope. [It will be deprecated.](https://developers
 |--------------|----------|-----------------|-----------------|
 | clientId     | String   | Required.       | The app's client ID, found and created in the Google Developers Console. |
 | scope        | String   | Optional.       | Default value is 'profile email' |
-| prompt       | String   | Optional.       | [This value using for authCode.](https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2offlineaccessoptions) The possible values are 'select_account' or 'consent'. Default value is 'select_account'. |
+| prompt       | String   | Optional.       | [This value using for authCode.](https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2offlineaccessoptions) The possible values are `select_account` or `consent`. Default value is `select_account`. To get refresh token from auth code, use `consent`|
 
 ## Methods
 | Property     | Description        | Type     |
@@ -44,7 +44,6 @@ Please Don't use `plus.login` scope. [It will be deprecated.](https://developers
 ## Usage - Getting authorization code
 >The `authCode` that is being returned is the `one-time code` that you can send to your backend server, so that the server can exchange for its own access_token and refresh_token.
 
-### Frontend-side(Vue.js)
 ```javascript
 this.$gAuth.getAuthCode()
 .then(authCode => {
@@ -59,34 +58,7 @@ this.$gAuth.getAuthCode()
 })
 ```
 
-
-### Backend-side(Golang)
-```go
-auth_code := ac.Code //from front-end side
-// generate a config of oauth
-conf := &oauth2.Config{
-	ClientID:     "XXXXXXXX",
-	ClientSecret: "XXXXXXXX",
-	RedirectURL:  "postmessage",
-	Scopes: []string{
-		"profile",
-		"email",
-		"https://www.googleapis.com/auth/plus.login",
-	},
-	Endpoint: "XXXXXX",
-}
-// exchange to token inclued refresh_token from code
-token, err = conf.Exchange(oauth2.NoContext, auth_code)
-if err != nil {
-	sErr := NewStatusErr(401, err.Error(), "Unauthorized")
-	return nil, &sErr
-}
-```
-Note, ```RedirectURL``` must be ```postmessage```!!
-
-
-
-## Usage - Directly get back the access_token and id_token or use api request
+## Usage - Directly get back the `access_token` and `id_token` or use api request
 
 ```javascript
 this.$gAuth.signIn()
@@ -102,6 +74,7 @@ this.$gAuth.signIn()
 
 refer to [google signIn reference : GoogleUser](https://developers.google.com/api-client-library/javascript/reference/referencedocs#googleusergetid)
 
+
 ## Usage - Sign-out
 Handling Google sign-out
 ```javascript
@@ -113,6 +86,18 @@ this.$gAuth.signOut()
 .catch(error  => {
   // things to do when sign-out fails
 })
+```
+
+## Extra - Directly get `access_token` and `refresh_token` on Server Side
+To get `access_token` and `refresh_token` in server side, the data for `redirect_uri` should be `postmessage`. `postmessage` is magic value for `redirect_uri` to get credentials without actual redirect uri.
+
+### Curl
+```
+curl -d "client_id=YOUR_CLIENT_ID&\
+    client_secret=YOUR_CLIENT_SECRET&\
+	redirect_uri=postmessage&\
+	grant_type=authorization_code&\
+	code=YOUR_AUTH_CODE" https://accounts.google.com/o/oauth2/token
 ```
 
 ## Additional Help
