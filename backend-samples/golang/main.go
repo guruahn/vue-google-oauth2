@@ -18,7 +18,7 @@ func main() {
 		Endpoint:     google.Endpoint,
 	}
 
-	// exchange to token inclued refresh_token from code
+	// exchange auth_code to token including refresh_token
 	token, err := conf.Exchange(oauth2.NoContext, auth_code)
 	if err != nil {
 		fmt.Errorf(err.Error())

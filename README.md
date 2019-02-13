@@ -4,8 +4,13 @@ Forked from https://github.com/TinyNova/vue-google-oauth
 
 
 ## Installation
+### Installation with npm
 ```
 npm install vue-google-oauth2
+```
+
+### Installation with yarn
+```
 yarn add vue-google-oauth2
 ```
 
@@ -27,8 +32,8 @@ Please Don't use `plus.login` scope. [It will be deprecated.](https://developers
 | Property     | Type     | Required        | Description     |
 |--------------|----------|-----------------|-----------------|
 | clientId     | String   | Required.       | The app's client ID, found and created in the Google Developers Console. |
-| scope        | String   | Optional.       | Default value is 'profile email' |
-| prompt       | String   | Optional.       | [This value using for authCode.](https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2offlineaccessoptions) The possible values are `select_account` or `consent`. Default value is `select_account`. To get refresh token from auth code, use `consent`|
+| scope        | String   | Optional.       | Default value is `profile email`. [Full list of scopes.](https://developers.google.com/identity/protocols/googlescopes) |
+| prompt       | String   | Optional.       | [This value using for authCode.](https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2offlineaccessoptions) The possible values are `select_account` or `consent`. Default value is `select_account`. To get refresh token from auth code, use `consent`.|
 
 ## Methods
 | Property     | Description        | Type     |
@@ -88,17 +93,20 @@ this.$gAuth.signOut()
 })
 ```
 
-## Extra - Directly get `access_token` and `refresh_token` on Server Side
+## Extra - Directly get `access_token` and `refresh_token` on Server-side
 To get `access_token` and `refresh_token` in server side, the data for `redirect_uri` should be `postmessage`. `postmessage` is magic value for `redirect_uri` to get credentials without actual redirect uri.
 
 ### Curl
 ```
 curl -d "client_id=YOUR_CLIENT_ID&\
-    client_secret=YOUR_CLIENT_SECRET&\
-	redirect_uri=postmessage&\
-	grant_type=authorization_code&\
-	code=YOUR_AUTH_CODE" https://accounts.google.com/o/oauth2/token
+  client_secret=YOUR_CLIENT_SECRET&\
+  redirect_uri=postmessage&\
+  grant_type=authorization_code&\
+  code=YOUR_AUTH_CODE" https://accounts.google.com/o/oauth2/token
 ```
+
+### Sample Code
+- [Golang](https://github.com/guruahn/vue-google-oauth2/blob/master/backend-samples/golang/main.go)
 
 ## Additional Help
 - [sample login page HTML file](https://github.com/guruahn/vue-google-oauth2/blob/master/sample.html).
