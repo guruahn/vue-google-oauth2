@@ -8,8 +8,8 @@ import (
 )
 
 func main() {
-	// auth_code is from frond-end side and only for one time use
-	auth_code := "YOUR_AUTH_CODE"
+	// authCode is from frond-end side and only for one time use
+	authCode := "YOUR_AUTH_CODE"
 
 	conf := &oauth2.Config{
 		ClientID:     "YOUR_CLIENT_ID",
@@ -18,10 +18,12 @@ func main() {
 		Endpoint:     google.Endpoint,
 	}
 
-	// exchange to token inclued refresh_token from code
-	token, err := conf.Exchange(oauth2.NoContext, auth_code)
+	// exchange auth_code to token including refresh_token
+	token, err := conf.Exchange(oauth2.NoContext, authCode)
+
 	if err != nil {
-		fmt.Errorf(err.Error())
+		fmt.Printf("%s\n", err.Error())
+		return
 	}
 
 	fmt.Printf("access_token: %s\n", token.AccessToken)
