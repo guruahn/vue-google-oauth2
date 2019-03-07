@@ -38,7 +38,7 @@ Please Don't use `plus.login` scope. [It will be deprecated.](https://developers
 ## Methods
 | Property     | Description        | Type     |
 |--------------|--------------------|----------|
-| GoogleAuth   | return of gapi.auth2.getAuthInstance()   | Object |
+| GoogleAuth   | return of [gapi.auth2.getAuthInstance()](https://developers.google.com/identity/sign-in/web/reference#gapiauth2authresponse)   | Object |
 | isAuthorized | Whether or not you have auth | Boolean  |
 | isInit       | Whether or not api init | Boolean  |
 | isLoaded     | Whether or not api init. will be deprecated. | Function  |
