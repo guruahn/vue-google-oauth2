@@ -1,6 +1,5 @@
 # vue-google-oauth2
 Handling Google sign-in and sign-out for Vue.js applications.
-Forked from https://github.com/TinyNova/vue-google-oauth
 
 
 ## Installation
@@ -38,7 +37,7 @@ Please Don't use `plus.login` scope. [It will be deprecated.](https://developers
 ## Methods
 | Property     | Description        | Type     |
 |--------------|--------------------|----------|
-| GoogleAuth   | return of gapi.auth2.getAuthInstance()   | Object |
+| GoogleAuth   | return of [gapi.auth2.getAuthInstance()](https://developers.google.com/identity/sign-in/web/reference#gapiauth2authresponse)   | Object |
 | isAuthorized | Whether or not you have auth | Boolean  |
 | isInit       | Whether or not api init | Boolean  |
 | isLoaded     | Whether or not api init. will be deprecated. | Function  |
@@ -70,6 +69,9 @@ this.$gAuth.signIn()
 .then(GoogleUser => {
   // On success do something, refer to https://developers.google.com/api-client-library/javascript/reference/referencedocs#googleusergetid
   console.log('user', GoogleUser)
+  // GoogleUser.getId() : Get the user's unique ID string.
+  // GoogleUser.getBasicProfile() : Get the user's basic profile information.
+  // GoogleUser.getAuthResponse() : Get the response object from the user's auth session. access_token and so on
   this.isSignIn = this.$gAuth.isAuthorized
 })
 .catch(error  => {
@@ -107,6 +109,7 @@ curl -d "client_id=YOUR_CLIENT_ID&\
 
 ### Sample Code
 - [Golang](https://github.com/guruahn/vue-google-oauth2/blob/master/backend-samples/golang/main.go)
+- [Python](https://github.com/guruahn/vue-google-oauth2/blob/master/backend-samples/python/main.py)
 
 ## Additional Help
 - [sample login page HTML file](https://github.com/guruahn/vue-google-oauth2/blob/master/sample.html).
