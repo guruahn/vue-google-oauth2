@@ -7,7 +7,7 @@ var googleAuth = (function () {
       var script = document.createElement('script')
       script.src = apiUrl
       script.onreadystatechange = script.onload = function () {
-        if (!script.readyState || /loaded|compvare/.test(script.readyState)) {
+        if (!script.readyState || /loaded|complete/.test(script.readyState)) {
           setTimeout(function () {
             resolve()
           }, 500)

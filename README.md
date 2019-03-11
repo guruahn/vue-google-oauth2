@@ -1,6 +1,5 @@
 # vue-google-oauth2
 Handling Google sign-in and sign-out for Vue.js applications.
-Forked from https://github.com/TinyNova/vue-google-oauth
 
 
 ## Installation
