@@ -1,5 +1,4 @@
 
-/* eslint-disable */
 var googleAuth = (function () {
 
   function installClient() {
@@ -38,6 +37,7 @@ var googleAuth = (function () {
     this.isInit = false
     this.prompt = null
     this.isLoaded = function () {
+      /* eslint-disable */
       console.warn('isLoaded() will be deprecated. You can use "this.$gAuth.isInit"')
       return !!this.GoogleAuth
     };
@@ -115,7 +115,7 @@ var googleAuth = (function () {
     };
   }
 
-  return Auth
+  return new Auth()
 })();
 
 
@@ -125,38 +125,29 @@ function installGoogleAuthPlugin(Vue, options) {
   //set config
   let GoogleAuthConfig = null
   let GoogleAuthDefaultConfig = { scope: 'profile email', discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'] }
-  let namesOfPropsVue = ['gAuth']
   let prompt = 'select_account'
   if (typeof options === 'object') {
     GoogleAuthConfig = Object.assign(GoogleAuthDefaultConfig, options)
     if (options.scope) GoogleAuthConfig.scope = options.scope
     if (options.prompt) prompt = options.prompt
     if (!options.clientId) {
+      /* eslint-disable */
       console.warn('clientId is required')
     }
   } else {
     console.warn('invalid option type. Object type accepted only')
   }
-  if (options.names && !Array.isArray(options.names)) {
-    console.warn('invalid option.name type. Array type accepted only')
-  }
-  if (options.names) namesOfPropsVue = options.names
-  console.log('nameOfPropsVue', namesOfPropsVue)
-  namesOfPropsVue.map(name => {
-    installVuePlugin(Vue, GoogleAuthConfig, prompt, name)
-  })
-}
 
-function installVuePlugin(Vue, GoogleAuthConfig, prompt, nameOfPropsVue) {
-  Vue[nameOfPropsVue] = new googleAuth()
+  //Install Vue plugin
+  Vue.gAuth = googleAuth
   Object.defineProperties(Vue.prototype, {
-    ['$' + nameOfPropsVue]: {
+    $gAuth: {
       get: function () {
-        return Vue[nameOfPropsVue]
+        return Vue.gAuth
       }
     }
   })
-  Vue[nameOfPropsVue].load(GoogleAuthConfig, prompt)
+  Vue.gAuth.load(GoogleAuthConfig, prompt)
 }
 
 export default installGoogleAuthPlugin
