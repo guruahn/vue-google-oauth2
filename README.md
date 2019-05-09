@@ -1,6 +1,7 @@
 # vue-google-oauth2
 Handling Google sign-in and sign-out for Vue.js applications.
 
+![vue-google-oauth2](https://img.shields.io/npm/dt/vue-google-oauth2.svg)
 
 ## Installation
 ### Installation with npm

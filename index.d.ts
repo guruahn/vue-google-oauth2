@@ -1,3 +1,4 @@
+import _Vue from "vue";
 
 var googleAuth = (function () {
 
@@ -121,7 +122,7 @@ var googleAuth = (function () {
 
 
 
-function installGoogleAuthPlugin(Vue, options) {
+function installGoogleAuthPlugin(Vue: typeof _Vue, options?: any): void {
   //set config
   let GoogleAuthConfig = null
   let GoogleAuthDefaultConfig = { scope: 'profile email', discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'] }
