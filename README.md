@@ -34,9 +34,9 @@ Please Don't use `plus.login` scope. [It will be deprecated.](https://developers
 | Property     | Type     | Required        | Description     |
 |--------------|----------|-----------------|-----------------|
 | clientId     | String   | Required.       | The app's client ID, found and created in the Google Developers Console. |
-| scope        | String   | Optional.       | Default value is `profile email`. [Full list of scopes.](https://developers.google.com/identity/protocols/googlescopes) |
-| prompt       | String   | Optional.       | [This value using for authCode.](https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2offlineaccessoptions) The possible values are `select_account` or `consent`. Default value is `select_account`. To get refresh token from auth code, use `consent`.|
-| fetch_basic_profile       | Boolean   | Optional.       | [If the fetch_basic_profile parameter is set to true, which will automatically add 'email profile openid' as scope.](https://developers.google.com/identity/sign-in/web/sign-in) Default value is `true`. |
+| scope        | String   | Optional.       | Default value is `profile email`. [Full list of scopes](https://developers.google.com/identity/protocols/googlescopes). |
+| prompt       | String   | Optional.       | This value using for [authCode.](https://developers.google.com/api-client-library/javascript/reference/referencedocs#gapiauth2offlineaccessoptions) The possible values are `select_account` or `consent`. Default value is `select_account`. To get refresh token from auth code, use `consent`.|
+| fetch_basic_profile       | Boolean   | Optional.       | If set to true, `email profile openid` will [be automatically added as scope](https://developers.google.com/identity/sign-in/web/sign-in). Default value is `true`. |
 
 ## Methods
 | Property     | Description        | Type     |
