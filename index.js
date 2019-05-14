@@ -122,6 +122,7 @@ var googleAuth = (function () {
 
 
 function installGoogleAuthPlugin(Vue, options) {
+  /* eslint-disable */
   //set config
   let GoogleAuthConfig = null
   let GoogleAuthDefaultConfig = { scope: 'profile email', discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'] }
@@ -131,7 +132,6 @@ function installGoogleAuthPlugin(Vue, options) {
     if (options.scope) GoogleAuthConfig.scope = options.scope
     if (options.prompt) prompt = options.prompt
     if (!options.clientId) {
-      /* eslint-disable */
       console.warn('clientId is required')
     }
   } else {
