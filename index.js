@@ -19,9 +19,10 @@ var googleAuth = (function () {
 
   function initClient(config) {
     return new Promise((resolve) => {
-      window.gapi.load('auth2', () => {
-        window.gapi.auth2.init(config)
+      window.gapi.load('client', () => {
+        window.gapi.client.init(config)
           .then(() => {
+            window.gapi.client.load('calendar', 'v3', () => console.log('loaded calendar'))
             resolve(window.gapi)
           })
       })
@@ -66,7 +67,10 @@ var googleAuth = (function () {
           .then(googleUser => {
             if (typeof successCallback === 'function') successCallback(googleUser)
             this.isAuthorized = this.GoogleAuth.isSignedIn.get()
-            resolve(googleUser)
+            resolve({
+              user: googleUser,
+              gapi: gapi
+            })
           })
           .catch(error => {
             if (typeof errorCallback === 'function') errorCallback(error)
