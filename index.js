@@ -34,6 +34,7 @@ var googleAuth = (function () {
     if (!(this instanceof Auth))
       return new Auth()
     this.GoogleAuth = null /* window.gapi.auth2.getAuthInstance() */
+    this.gapi = null
     this.isAuthorized = false
     this.isInit = false
     this.prompt = null
@@ -50,6 +51,7 @@ var googleAuth = (function () {
         })
         .then((gapi) => {
           this.GoogleAuth = gapi.auth2.getAuthInstance()
+          this.gapi = gapi
           this.isInit = true
           this.prompt = prompt
           this.isAuthorized = this.GoogleAuth.isSignedIn.get()
