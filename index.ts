@@ -22,9 +22,9 @@ const googleAuth = ((): any => {
     });
   };
 
-  const initClient = (config: any) => {
+  const initClient = (config: any, apiName: string) => {
     return new Promise((resolve) => {
-      window.gapi.load('auth2', () => {
+      window.gapi.load(apiName, () => {
         window.gapi.auth2.init(config)
           .then(() => {
             resolve(window.gapi);
@@ -44,10 +44,10 @@ const googleAuth = ((): any => {
       return !!this.GoogleAuth;
     };
 
-    this.load = (config: any, prompt: string) => {
+    this.load = (config: any, prompt: string, apiName: string) => {
       installClient()
         .then(() => {
-          return initClient(config);
+          return initClient(config, apiName);
         })
         .then((gapi: any) => {
           this.GoogleAuth = gapi.auth2.getAuthInstance();
@@ -139,7 +139,7 @@ const googleAuth = ((): any => {
 })();
 
 
-function installGoogleAuthPlugin(Vue: typeof _Vue, options?: any): void {
+function installGoogleAuthPlugin(Vue: typeof _Vue, options?: any, apiNameToLoad?: string): void {
   // set config
   let GoogleAuthConfig = null;
   const GoogleAuthDefaultConfig = {
@@ -163,6 +163,7 @@ function installGoogleAuthPlugin(Vue: typeof _Vue, options?: any): void {
     // tslint:disable-next-line
     console.warn('invalid option type. Object type accepted only');
   }
+  const apiName = apiNameToLoad ? apiNameToLoad : 'client'  
 
   // Install Vue plugin
   Object.defineProperties(Vue.prototype, {
@@ -172,7 +173,7 @@ function installGoogleAuthPlugin(Vue: typeof _Vue, options?: any): void {
       },
     },
   });
-  googleAuth.load(GoogleAuthConfig, prompt);
+  googleAuth.load(GoogleAuthConfig, prompt, apiName);
 }
 // tslint:disable-next-line
 export default installGoogleAuthPlugin;
