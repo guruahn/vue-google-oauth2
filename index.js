@@ -137,7 +137,7 @@ function installGoogleAuthPlugin(Vue, options, apiNameToLoad) {
   } else {
     console.warn('invalid option type. Object type accepted only')
   }
-  const apiName = apiNameToLoad ? apiNameToLoad : 'client'  
+  const apiName = apiNameToLoad ? apiNameToLoad : 'auth2'  
 
   //Install Vue plugin
   Vue.gAuth = googleAuth

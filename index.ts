@@ -163,7 +163,7 @@ function installGoogleAuthPlugin(Vue: typeof _Vue, options?: any, apiNameToLoad?
     // tslint:disable-next-line
     console.warn('invalid option type. Object type accepted only');
   }
-  const apiName = apiNameToLoad ? apiNameToLoad : 'client'  
+  const apiName = apiNameToLoad ? apiNameToLoad : 'auth2'  
 
   // Install Vue plugin
   Object.defineProperties(Vue.prototype, {
