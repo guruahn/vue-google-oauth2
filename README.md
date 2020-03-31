@@ -115,9 +115,9 @@ curl -d "client_id=YOUR_CLIENT_ID&\
 ```
 
 ### Sample Code
-- [Golang](https://github.com/guruahn/vue-google-oauth2/blob/master/backend-samples/golang/main.go)
-- [Python](https://github.com/guruahn/vue-google-oauth2/blob/master/backend-samples/python/main.py)
-- [github](https://github.com/guruahn/vue-google-oauth2-front-sample)
+- [Golang Sample Code](https://github.com/guruahn/vue-google-oauth2/blob/master/backend-samples/golang/main.go)
+- [Python Sample Code](https://github.com/guruahn/vue-google-oauth2/blob/master/backend-samples/python/main.py)
+- [Front Sample Code](https://github.com/guruahn/vue-google-oauth2-front-sample)
 
 ## Additional Help
 - [sample login page HTML file](https://github.com/guruahn/vue-google-oauth2/blob/master/sample.html).
