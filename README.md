@@ -5,7 +5,9 @@ Handling Google sign-in and sign-out for Vue.js applications.
 ![GitHub](https://img.shields.io/github/license/guruahn/vue-google-oauth2.svg)
 ![vue-google-oauth2](https://img.shields.io/npm/dt/vue-google-oauth2.svg)
 
-We support [TypeScript](https://www.typescriptlang.org/) but not [Nuxt](https://ko.nuxtjs.org/).
+We support [TypeScript](https://www.typescriptlang.org/) 😎 but not [Nuxt](https://ko.nuxtjs.org/). 😢
+
+[Front-end Demo](https://stupefied-darwin-da9533.netlify.com/)
 ## Installation
 ### Installation with npm
 ```
@@ -115,7 +117,7 @@ curl -d "client_id=YOUR_CLIENT_ID&\
 ### Sample Code
 - [Golang](https://github.com/guruahn/vue-google-oauth2/blob/master/backend-samples/golang/main.go)
 - [Python](https://github.com/guruahn/vue-google-oauth2/blob/master/backend-samples/python/main.py)
-- [Front-end Sample Project](https://github.com/guruahn/vue-google-oauth2-front-sample)
+- [github](https://github.com/guruahn/vue-google-oauth2-front-sample)
 
 ## Additional Help
 - [sample login page HTML file](https://github.com/guruahn/vue-google-oauth2/blob/master/sample.html).
