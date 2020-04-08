@@ -18,11 +18,13 @@ var googleAuth = (function () {
   }
 
   function initClient(config) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       window.gapi.load('auth2', () => {
         window.gapi.auth2.init(config)
           .then(() => {
             resolve(window.gapi)
+          }).catch((error) => {
+            reject(error)
           })
       })
     })
@@ -52,6 +54,8 @@ var googleAuth = (function () {
           this.isInit = true
           this.prompt = prompt
           this.isAuthorized = this.GoogleAuth.isSignedIn.get()
+        }).catch((error) => {
+          console.error(error)
         })
     };
 
