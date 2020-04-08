@@ -5,7 +5,7 @@ Handling Google sign-in and sign-out for Vue.js applications.
 ![GitHub](https://img.shields.io/github/license/guruahn/vue-google-oauth2.svg)
 ![vue-google-oauth2](https://img.shields.io/npm/dt/vue-google-oauth2.svg)
 
-We support [TypeScript](https://www.typescriptlang.org/) 😎 but not [Nuxt](https://ko.nuxtjs.org/). 😢
+We support [TypeScript](https://www.typescriptlang.org/) and [Nuxt](https://ko.nuxtjs.org/). 😎 
 
 [Front-end Demo](https://stupefied-darwin-da9533.netlify.com/)
 ## Installation
@@ -33,7 +33,37 @@ Vue.use(GAuth, gauthOption)
 ```
 Please Don't use `plus.login` scope. [It will be deprecated.](https://developers.google.com/identity/sign-in/web/quick-migration-guide)
 
-### Options
+### Initialization for Nuxt
+1. creates plug-in file for nuxt
+
+	```javascript
+	// plugins/vue-google-oauth2.js
+	// file name can be changed to whatever you want
+	import Vue from 'vue'
+	import GAuth from 'vue-google-oauth2'
+
+	const gauthOption = {
+	  clientId: 'CLIENT_ID.apps.googleusercontent.com',
+	  scope: 'profile email',
+	  prompt: 'select_account'
+	}
+	Vue.use(GAuth, gauthOption)
+
+	```
+
+2. adds plugin to nuxt config file
+	```javascript
+	...
+	plugins: [
+	  ...
+      './plugins/vue-google-oauth2'
+	],
+
+	...
+
+	```
+
+## Options
 | Property     | Type     | Required        | Description     |
 |--------------|----------|-----------------|-----------------|
 | clientId     | String   | Required.       | The app's client ID, found and created in the Google Developers Console. |
@@ -52,14 +82,18 @@ Please Don't use `plus.login` scope. [It will be deprecated.](https://developers
 | getAuthCode  | function for getting authCode | Function  |
 | signOut      | function for sign-out | Function  |
 
-## Usage - Getting authorization code
->The `authCode` that is being returned is the `one-time code` that you can send to your backend server, so that the server can exchange for its own access_token and refresh_token.
+
+## Usages
+### Getting authorization code
+The `authCode` that is being returned is the `one-time code` that you can send to your backend server, so that the server can exchange for its own access_token and refresh_token.
+
+The `access_token` and `refresh_token` can be saved in backend storage for reuse and refresh. In this way, you can avoid exposing your api key or secret key whenever you need to use various google APIs.
 
 ```javascript
 this.$gAuth.getAuthCode()
 .then(authCode => {
   //on success
-  return this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' })
+  return this.$http.post('http://your-backend-server-api-to-use-authcode', { code: authCode, redirect_uri: 'postmessage' })
 })
 .then(response => {
   //after ajax
@@ -69,7 +103,7 @@ this.$gAuth.getAuthCode()
 })
 ```
 
-## Usage - Directly get back the `access_token` and `id_token` or use api request
+### Sign-in: Directly get back the `access_token` and `id_token`
 
 ```javascript
 this.$gAuth.signIn()
@@ -89,7 +123,7 @@ this.$gAuth.signIn()
 refer to [google signIn reference : GoogleUser](https://developers.google.com/api-client-library/javascript/reference/referencedocs#googleusergetid)
 
 
-## Usage - Sign-out
+### Sign-out
 Handling Google sign-out
 ```javascript
 //you can use promise from v1.1.0 also
@@ -124,3 +158,11 @@ curl -d "client_id=YOUR_CLIENT_ID&\
 - [Google API Client Libraries : Methods and Classes](https://developers.google.com/api-client-library/javascript/reference/referencedocs)
 - If you are curious of how the entire Google sign-in flow works, please refer to the diagram below
 ![Google Sign-in Flow](http://i.imgur.com/BQPXKyT.png)
+
+
+## FAQ
+### The failure of initialization happens
+You can check the brower console to check errors which occur during initialization.
+The most of errors are from inproper setting of google oauth2 credentials setting in Google Developer Console.
+After changing the settings, you have to do hard refresh to clear your caches.
+
