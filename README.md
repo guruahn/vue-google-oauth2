@@ -90,34 +90,19 @@ The `authCode` that is being returned is the `one-time code` that you can send t
 The `access_token` and `refresh_token` can be saved in backend storage for reuse and refresh. In this way, you can avoid exposing your api key or secret key whenever you need to use various google APIs.
 
 ```javascript
-this.$gAuth.getAuthCode()
-.then(authCode => {
-  //on success
-  return this.$http.post('http://your-backend-server-api-to-use-authcode', { code: authCode, redirect_uri: 'postmessage' })
-})
-.then(response => {
-  //after ajax
-})
-.catch(error => {
-  //on fail do something
-})
+const authCode = await this.$gAuth.getAuthCode()
+const response = await this.$http.post('http://your-backend-server-api-to-use-authcode', { code: authCode, redirect_uri: 'postmessage' })
 ```
 
 ### Sign-in: Directly get back the `access_token` and `id_token`
 
 ```javascript
-this.$gAuth.signIn()
-.then(GoogleUser => {
-  // On success do something, refer to https://developers.google.com/api-client-library/javascript/reference/referencedocs#googleusergetid
-  console.log('user', GoogleUser)
-  // GoogleUser.getId() : Get the user's unique ID string.
-  // GoogleUser.getBasicProfile() : Get the user's basic profile information.
-  // GoogleUser.getAuthResponse() : Get the response object from the user's auth session. access_token and so on
-  this.isSignIn = this.$gAuth.isAuthorized
-})
-.catch(error  => {
-  //on fail do something
-})
+const googleUser = await this.$gAuth.signIn()
+// googleUser.getId() : Get the user's unique ID string.
+// googleUser.getBasicProfile() : Get the user's basic profile information.
+// googleUser.getAuthResponse() : Get the response object from the user's auth session. access_token and so on
+this.isSignIn = this.$gAuth.isAuthorized
+
 ```
 
 refer to [google signIn reference : GoogleUser](https://developers.google.com/api-client-library/javascript/reference/referencedocs#googleusergetid)
@@ -126,14 +111,7 @@ refer to [google signIn reference : GoogleUser](https://developers.google.com/ap
 ### Sign-out
 Handling Google sign-out
 ```javascript
-//you can use promise from v1.1.0 also
-this.$gAuth.signOut()
-.then(() => {
-  // things to do when sign-out succeeds
-})
-.catch(error  => {
-  // things to do when sign-out fails
-})
+const response = await sthis.$gAuth.signOut()
 ```
 
 ## Extra - Directly get `access_token` and `refresh_token` on Server-side
