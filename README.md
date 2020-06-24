@@ -111,7 +111,7 @@ refer to [google signIn reference : GoogleUser](https://developers.google.com/ap
 ### Sign-out
 Handling Google sign-out
 ```javascript
-const response = await sthis.$gAuth.signOut()
+const response = await this.$gAuth.signOut()
 ```
 
 ## Extra - Directly get `access_token` and `refresh_token` on Server-side
