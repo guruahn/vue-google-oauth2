@@ -148,7 +148,6 @@ function installGoogleAuthPlugin(Vue: typeof _Vue, options?: any): void {
   let GoogleAuthConfig: any = null;
   const GoogleAuthDefaultConfig = {
     scope: 'profile email',
-    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
   };
   let prompt = 'select_account';
   if (typeof options === 'object') {
