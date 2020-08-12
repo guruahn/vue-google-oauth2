@@ -143,4 +143,6 @@ curl -d "client_id=YOUR_CLIENT_ID&\
 You can check the brower console to check errors which occur during initialization.
 The most of errors are from inproper setting of google oauth2 credentials setting in Google Developer Console.
 After changing the settings, you have to do hard refresh to clear your caches.
+### Type Errors
+Follow the documentation provided [here](https://vuejs.org/v2/guide/typescript.html#Augmenting-Types-for-Use-with-Plugins) to add `$gAuth` as a property for preventing lint errors.
 
