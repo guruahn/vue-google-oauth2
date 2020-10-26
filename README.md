@@ -5,10 +5,9 @@ Handling Google sign-in and sign-out for Vue.js applications.
 ![GitHub](https://img.shields.io/github/license/guruahn/vue-google-oauth2.svg)
 ![vue-google-oauth2](https://img.shields.io/npm/dt/vue-google-oauth2.svg)
 
-[Version 1.x.x Documentation here!](https://github.com/guruahn/vue-google-oauth2/blob/master/README_V1.md)
+We support [TypeScript](https://www.typescriptlang.org/) and [Nuxt](https://ko.nuxtjs.org/). 😎 
 
 [Front-end Demo](https://stupefied-darwin-da9533.netlify.com/)
-
 ## Installation
 ### Installation with npm
 ```
@@ -21,29 +20,48 @@ yarn add vue-google-oauth2
 ```
 
 ## Initialization
-
-### Vue.js 2.x
 ```javascript
 //src/main.js
 import GAuth from 'vue-google-oauth2'
 const gauthOption = {
-  clientId: 'YOUR_CLIENT_ID',
+  clientId: 'CLIENT_ID.apps.googleusercontent.com',
   scope: 'profile email',
   prompt: 'select_account'
 }
 Vue.use(GAuth, gauthOption)
 
 ```
+Please Don't use `plus.login` scope. [It will be deprecated.](https://developers.google.com/identity/sign-in/web/quick-migration-guide)
 
-### Vue.js 3.x
-```javascript
-import { createApp } from 'vue'
-import App from './App.vue'
-import GAuth from 'vue-google-oauth2'
-const app = createApp(App)
-app.use(GAuth, { clientId: 'YOUR_CLIENT_ID', scope: 'email', prompt: 'consent', fetch_basic_profile: false })
-```
+### Initialization for Nuxt
+1. creates plug-in file for nuxt
 
+	```javascript
+	// plugins/vue-google-oauth2.js
+	// file name can be changed to whatever you want
+	import Vue from 'vue'
+	import GAuth from 'vue-google-oauth2'
+
+	const gauthOption = {
+	  clientId: 'CLIENT_ID.apps.googleusercontent.com',
+	  scope: 'profile email',
+	  prompt: 'select_account'
+	}
+	Vue.use(GAuth, gauthOption)
+
+	```
+
+2. adds plugin to nuxt config file
+	```javascript
+	...
+	plugins: [
+	  ...
+      './plugins/vue-google-oauth2'
+	],
+
+	...
+
+	```
 
 ## Options
 | Property     | Type     | Required        | Description     |
@@ -57,6 +75,9 @@ app.use(GAuth, { clientId: 'YOUR_CLIENT_ID', scope: 'email', prompt: 'consent', 
 | Property     | Description        | Type     |
 |--------------|--------------------|----------|
 | GoogleAuth   | return of [gapi.auth2.getAuthInstance()](https://developers.google.com/identity/sign-in/web/reference#gapiauth2authresponse)   | Object |
+| isAuthorized | Whether or not you have auth | Boolean  |
+| isInit       | Whether or not api init | Boolean  |
+| isLoaded     | Whether or not api init. will be deprecated. | Function  |
 | signIn       | function for sign-in | Function  |
 | getAuthCode  | function for getting authCode | Function  |
 | signOut      | function for sign-out | Function  |
@@ -81,7 +102,6 @@ const googleUser = await this.$gAuth.signIn()
 // googleUser.getBasicProfile() : Get the user's basic profile information.
 // googleUser.getAuthResponse() : Get the response object from the user's auth session. access_token and so on
 this.isSignIn = this.$gAuth.isAuthorized
-// TODO: injection 코드로 대체.  
 
 ```
 

@@ -1,18 +1,11 @@
-import { reactive, readonly } from "vue";
-let Vue3GoogleOauth;
-if(reactive){
-  Vue3GoogleOauth = reactive({
-    isInit: false,
-    isAuthorized: false
-  })
-}
-const googleAuth = (function () {
+
+var googleAuth = (function () {
 
   function installClient() {
-    const apiUrl = 'https://apis.google.com/js/api.js';
+    var apiUrl = 'https://apis.google.com/js/api.js'
     return new Promise((resolve) => {
-      let script = document.createElement('script');
-      script.src = apiUrl;
+      var script = document.createElement('script')
+      script.src = apiUrl
       script.onreadystatechange = script.onload = function () {
         if (!script.readyState || /loaded|complete/.test(script.readyState)) {
           setTimeout(function () {
@@ -20,7 +13,7 @@ const googleAuth = (function () {
           }, 500)
         }
       }
-      document.getElementsByTagName('head')[0].appendChild(script);
+      document.getElementsByTagName('head')[0].appendChild(script)
     })
   }
 
@@ -29,9 +22,9 @@ const googleAuth = (function () {
       window.gapi.load('auth2', () => {
         window.gapi.auth2.init(config)
           .then(() => {
-            resolve(window.gapi);
+            resolve(window.gapi)
           }).catch((error) => {
-            reject(error);
+            reject(error)
           })
       })
     })
@@ -40,87 +33,86 @@ const googleAuth = (function () {
 
   function Auth() {
     if (!(this instanceof Auth))
-      return new Auth();
-    this.GoogleAuth = null; /* window.gapi.auth2.getAuthInstance() */
-    this.prompt = null;
-    this.isInit = false;
-    this.isAuthorized = false;
-    this.load = (config) => {
+      return new Auth()
+    this.GoogleAuth = null /* window.gapi.auth2.getAuthInstance() */
+    this.isAuthorized = false
+    this.isInit = false
+    this.prompt = null
+    this.isLoaded = function () {
+      /* eslint-disable */
+      console.warn('isLoaded() will be deprecated. You can use "this.$gAuth.isInit"')
+      return !!this.GoogleAuth
+    };
+
+    this.load = (config, prompt) => {
       installClient()
         .then(() => {
           return initClient(config)
         })
         .then((gapi) => {
-          this.GoogleAuth = gapi.auth2.getAuthInstance();
-          this.prompt = config.prompt;
-          if(Vue3GoogleOauth){
-            Vue3GoogleOauth.isInit = true;
-          }else{
-            this.isInit = true;
-          }
-          if(Vue3GoogleOauth) {
-            Vue3GoogleOauth.isAuthorized = this.GoogleAuth.isSignedIn.get();
-          }else{
-            this.isAuthorized = this.GoogleAuth.isSignedIn.get();
-          }
+          this.GoogleAuth = gapi.auth2.getAuthInstance()
+          this.isInit = true
+          this.prompt = prompt
+          this.isAuthorized = this.GoogleAuth.isSignedIn.get()
         }).catch((error) => {
-          console.error(error);
+          console.error(error)
         })
     };
 
-    this.signIn = () => {
+    this.signIn = (successCallback, errorCallback) => {
       return new Promise((resolve, reject) => {
         if (!this.GoogleAuth) {
+          if (typeof errorCallback === 'function') errorCallback(false)
           reject(false)
           return
         }
         this.GoogleAuth.signIn()
           .then(googleUser => {
-            if(Vue3GoogleOauth) {
-              Vue3GoogleOauth.isAuthorized = this.GoogleAuth.isSignedIn.get();
-            }else{
-              this.isAuthorized = this.GoogleAuth.isSignedIn.get();
-            }
-            resolve(googleUser);
+            if (typeof successCallback === 'function') successCallback(googleUser)
+            this.isAuthorized = this.GoogleAuth.isSignedIn.get()
+            resolve(googleUser)
           })
           .catch(error => {
-            reject(error);
-          })
-      })
-    };
-
-    this.getAuthCode = () => {
-      return new Promise((resolve, reject) => {
-        if (!this.GoogleAuth) {
-          reject(false)
-          return
-        }
-        this.GoogleAuth.grantOfflineAccess({ prompt: this.prompt })
-          .then(function (resp) {
-            resolve(resp.code)
-          })
-          .catch(function (error) {
+            if (typeof errorCallback === 'function') errorCallback(error)
             reject(error)
           })
       })
     };
 
-    this.signOut = () => {
+    this.getAuthCode = (successCallback, errorCallback) => {
       return new Promise((resolve, reject) => {
         if (!this.GoogleAuth) {
+          if (typeof errorCallback === 'function') errorCallback(false)
+          reject(false)
+          return
+        }
+        this.GoogleAuth.grantOfflineAccess({ prompt: this.prompt })
+          .then(function (resp) {
+            if (typeof successCallback === 'function') successCallback(resp.code)
+            resolve(resp.code)
+          })
+          .catch(function (error) {
+            if (typeof errorCallback === 'function') errorCallback(error)
+            reject(error)
+          })
+      })
+    };
+
+    this.signOut = (successCallback, errorCallback) => {
+      return new Promise((resolve, reject) => {
+        if (!this.GoogleAuth) {
+          if (typeof errorCallback === 'function') errorCallback(false)
           reject(false)
           return
         }
         this.GoogleAuth.signOut()
           .then(() => {
-            if(Vue3GoogleOauth) {
-              Vue3GoogleOauth.isAuthorized = false;
-            }else{
-              this.isAuthorized = false;
-            }
+            if (typeof successCallback === 'function') successCallback()
+            this.isAuthorized = false
             resolve(true)
           })
           .catch(error => {
+            if (typeof errorCallback === 'function') errorCallback(error)
             reject(error)
           })
       })
@@ -130,39 +122,36 @@ const googleAuth = (function () {
   return new Auth()
 })();
 
-export default {
-  install: (app, options) => {
-    /* eslint-disable */
-    //set config
-    let config = null
-    let defaultConfig = { scope: 'profile email', prompt: 'select_account' };
-    if (typeof options === 'object') {
-      config = Object.assign(defaultConfig, options);
-      if (!options.clientId) {
-        throw new Error('clientId is require');
-      }
-    } else {
-      throw new TypeError('invalid option type. Object type accepted only');
-    }
 
-    //Install Vue plugin
-    if(Vue3GoogleOauth) {
-      googleAuth.load(config);
-      app.config.globalProperties.$gAuth = googleAuth;
-      app.provide('Vue3GoogleOauth', readonly(Vue3GoogleOauth))
-    }else{
-      app.gAuth = googleAuth
-      Object.defineProperties(app.prototype, {
-        $gAuth: {
-          get: function () {
-            return app.gAuth
-          }
-        }
-      });
-      app.gAuth.load(config);
-    }
-    
-    
 
+
+function installGoogleAuthPlugin(Vue, options) {
+  /* eslint-disable */
+  //set config
+  let GoogleAuthConfig = null
+  let GoogleAuthDefaultConfig = { scope: 'profile email', discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'] }
+  let prompt = 'select_account'
+  if (typeof options === 'object') {
+    GoogleAuthConfig = Object.assign(GoogleAuthDefaultConfig, options)
+    if (options.scope) GoogleAuthConfig.scope = options.scope
+    if (options.prompt) prompt = options.prompt
+    if (!options.clientId) {
+      console.warn('clientId is required')
+    }
+  } else {
+    console.warn('invalid option type. Object type accepted only')
   }
+
+  //Install Vue plugin
+  Vue.gAuth = googleAuth
+  Object.defineProperties(Vue.prototype, {
+    $gAuth: {
+      get: function () {
+        return Vue.gAuth
+      }
+    }
+  })
+  Vue.gAuth.load(GoogleAuthConfig, prompt)
 }
+
+export default installGoogleAuthPlugin

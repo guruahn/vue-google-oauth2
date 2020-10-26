@@ -1,8 +1,9 @@
 {
   "name": "vue-google-oauth2",
-  "version": "2.0.0",
-  "description": "Handling Google Auth2 sign-in and sign-out on Vue.js",
+  "version": "1.5.4",
+  "description": "Handling Google Auth2 sign-in and sign-out",
   "main": "index.js",
+  "types": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,7 +13,6 @@
   },
   "keywords": [
     "vue",
-    "vue3",
     "google",
     "authentication",
     "gapi",
