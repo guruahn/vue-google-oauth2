@@ -34,6 +34,25 @@ Vue.use(GAuth, gauthOption)
 ```
 Please Don't use `plus.login` scope. [It will be deprecated.](https://developers.google.com/identity/sign-in/web/quick-migration-guide)
 
+### Initialization for VUE3
+```javascript
+//src/main.js
+import GAuth from 'vue-google-oauth2'
+
+// set auth config
+const prompt = 'select_account'
+const GoogleAuthConfig = Object.assign({ scope: 'profile email' }, {
+  clientId: CLIENT_ID',
+  scope: 'profile email https://www.googleapis.com/auth/plus.login',
+});
+
+
+// Install Vue plugin
+app.config.globalProperties.$gAuth = googleAuth;
+app.config.globalProperties.$gAuth.load(GoogleAuthConfig, prompt)
+
+```
+
 ### Initialization for Nuxt
 1. creates plug-in file for nuxt
 
