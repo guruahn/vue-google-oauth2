@@ -1,6 +1,4 @@
-
 var googleAuth = (function () {
-
   function installClient() {
     var apiUrl = 'https://apis.google.com/js/api.js'
     return new Promise((resolve) => {
@@ -122,36 +120,4 @@ var googleAuth = (function () {
   return new Auth()
 })();
 
-
-
-
-function installGoogleAuthPlugin(Vue, options) {
-  /* eslint-disable */
-  //set config
-  let GoogleAuthConfig = null
-  let GoogleAuthDefaultConfig = { scope: 'profile email' }
-  let prompt = 'select_account'
-  if (typeof options === 'object') {
-    GoogleAuthConfig = Object.assign(GoogleAuthDefaultConfig, options)
-    if (options.scope) GoogleAuthConfig.scope = options.scope
-    if (options.prompt) prompt = options.prompt
-    if (!options.clientId) {
-      console.warn('clientId is required')
-    }
-  } else {
-    console.warn('invalid option type. Object type accepted only')
-  }
-
-  //Install Vue plugin
-  Vue.gAuth = googleAuth
-  Object.defineProperties(Vue.prototype, {
-    $gAuth: {
-      get: function () {
-        return Vue.gAuth
-      }
-    }
-  })
-  Vue.gAuth.load(GoogleAuthConfig, prompt)
-}
-
-export default installGoogleAuthPlugin
+export default googleAuth;
