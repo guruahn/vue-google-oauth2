@@ -136,7 +136,7 @@ curl -d "client_id=YOUR_CLIENT_ID&\
 - [sample login page HTML file](https://github.com/guruahn/vue-google-oauth2/blob/master/sample.html).
 - [Google API Client Libraries : Methods and Classes](https://developers.google.com/api-client-library/javascript/reference/referencedocs)
 - If you are curious of how the entire Google sign-in flow works, please refer to the diagram below
-![Google Sign-in Flow](http://i.imgur.com/BQPXKyT.png)
+![Google Sign-in Flow](https://developers.google.com/identity/sign-in/web/server_side_code_flow.png)
 
 
 ## FAQ
