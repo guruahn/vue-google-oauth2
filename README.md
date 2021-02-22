@@ -5,7 +5,7 @@ Handling Google sign-in and sign-out for Vue.js applications.
 ![GitHub](https://img.shields.io/github/license/guruahn/vue-google-oauth2.svg)
 ![vue-google-oauth2](https://img.shields.io/npm/dt/vue-google-oauth2.svg)
 
-We support [TypeScript](https://www.typescriptlang.org/) and [Nuxt](https://ko.nuxtjs.org/). 😎 
+We support ~~[TypeScript](https://www.typescriptlang.org/)~~ and [Nuxt](https://ko.nuxtjs.org/). 😎 
 For Vue3 applications, please refer to [here](https://github.com/guruahn/vue3-google-oauth2) 
 
 [Front-end Demo](https://stupefied-darwin-da9533.netlify.com/)
