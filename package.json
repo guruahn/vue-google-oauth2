@@ -1,6 +1,6 @@
 {
   "name": "vue-google-oauth2",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "description": "Handling Google Auth2 sign-in and sign-out",
   "main": "index.js",
   "types": "index.ts",
