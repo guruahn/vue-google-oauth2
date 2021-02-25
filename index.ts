@@ -8,7 +8,7 @@ const googleAuth = ((): any => {
 
   const installClient = () => {
     const apiUrl = 'https://apis.google.com/js/api.js';
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       const script: any = document.createElement('script');
       script.src = apiUrl;
       script.onreadystatechange = script.onload = () => {
