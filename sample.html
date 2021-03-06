@@ -25,18 +25,15 @@ export default {
   },
 
   methods: {
-    handleClickGetAuth(){
-      this.$gAuth.getAuthCode()
-      .then(authCode => {
-        // On success
-        return this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' })
-      })
-      .then(response => {
-        // And then
-      })
-      .catch(error => {
-        // On fail do something
-      })
+    handleClickGetAuth() {
+      this.$gAuth.getAuthCode(
+        async authCode => {
+          // On success
+          const response = await this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' })
+          // And then
+        }, error => {
+          // On fail do something
+        })
     },
 
     handleClickSignIn(){
