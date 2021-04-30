@@ -25,34 +25,38 @@ export default {
   },
 
   methods: {
-    async handleClickGetAuth() {
-      try {
-        const authCode = await this.$gAuth.getAuthCode()
-        const response = await this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' })
-      } catch (error) {
-        // On fail do something
-      }
+    handleClickGetAuth() {
+      this.$gAuth.getAuthCode(
+        async authCode => {
+          // On success
+          const response = await this.$http.post('http://your-backend-server.com/auth/google', { code: authCode, redirect_uri: 'postmessage' })
+          // And then
+        }, error => {
+          // On fail do something
+        })
     },
 
-    async handleClickSignIn(){
-      try {
-        const googleUser = await this.$gAuth.signIn()
-        console.log('user', googleUser)
+    handleClickSignIn(){
+      this.$gAuth.signIn()
+      .then(user => {
+        // On success do something, refer to https://developers.google.com/api-client-library/javascript/reference/referencedocs#googleusergetid
+        console.log('user', GoogleUser)
         this.isSignIn = this.$gAuth.isAuthorized
-      } catch (error) {
+      })
+      .catch(error  => {
         // On fail do something
-        console.error(error);
-        return null;
-      }
+      })
     },
 
-    async handleClickSignOut(){
-      try {
-        await this.$gAuth.signOut()
+    handleClickSignOut(){
+      this.$gAuth.signOut()
+      .then(() => {
+        // On success do something
         this.isSignIn = this.$gAuth.isAuthorized
-      } catch (error) {
+      })
+      .catch(error  => {
         // On fail do something
-      }
+      })
     }
   },
   mounted(){
