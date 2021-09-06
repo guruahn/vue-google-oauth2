@@ -1,6 +1,7 @@
-# python example for the exchange of auth code to refresh token
+# Python example for the exchange of auth code to refresh token
 # Reference: https://google-auth-oauthlib.readthedocs.io/en/latest/reference/google_auth_oauthlib.flow.html
 from google_auth_oauthlib.flow import Flow
+from oauthlib.oauth2.rfc6749.errors import OAuth2Error
 
 CLIENT_SECRETS_FILE = 'YOUR_CLIENT_SECRETS_FILE'  # get this from https://console.cloud.google.com/apis/credentials
 
@@ -19,7 +20,11 @@ if __name__ == "__main__":
     auth_code = 'auth_code_from_client'
 
     flow = Flow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES, redirect_uri="postmessage")
-    flow.fetch_token(auth_code)
+    try:
+        flow.fetch_token(auth_code)
+    except OAuth2Error:
+        # error handling, for example InvalidGrantError for malformed auth_code
+        print('An error occured')
 
     credentials = flow.credentials
 
