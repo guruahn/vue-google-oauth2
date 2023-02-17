@@ -1,3 +1,6 @@
+# DEPRECATED - no longer actively maintained
+This plugin does not support the new Google authentication system(GIS). You need to migrate by referring to [this document](https://developers.google.com/identity/oauth2/web/guides/migration-to-gis?hl=en).
+
 # vue-google-oauth2
 Handling Google sign-in and sign-out for Vue.js applications.
 
